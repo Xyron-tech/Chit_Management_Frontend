@@ -1,0 +1,534 @@
+/* ============================================
+   ChitDetail — Professional & Responsive CSS
+   ============================================ */
+
+/* ---- Layout ---- */
+.cd-layout {
+    min-height: 100vh;
+    background: #f5f5f7;
+}
+
+.cd-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f7;
+}
+
+/* ---- Header ---- */
+.cd-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 60px;
+    background: #1a1a2e;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.cd-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cd-brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #4f6ef7;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.cd-brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+}
+
+.cd-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cd-btn-ghost {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    color: rgba(255,255,255,0.8) !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    transition: all 0.2s !important;
+}
+
+.cd-btn-ghost:hover {
+    border-color: rgba(255,255,255,0.4) !important;
+    color: #fff !important;
+    background: rgba(255,255,255,0.06) !important;
+}
+
+.cd-btn-danger:hover {
+    border-color: #ff4d4f !important;
+    color: #ff4d4f !important;
+    background: rgba(255, 77, 79, 0.08) !important;
+}
+
+/* ---- Content ---- */
+.cd-content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+    width: 100%;
+}
+
+/* ---- Page Header ---- */
+.cd-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+}
+
+.cd-page-title {
+    margin: 0 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #1a1a2e !important;
+    line-height: 1.3 !important;
+}
+
+.cd-page-subtitle {
+    font-size: 13px;
+    color: #8c8c8c;
+    margin-top: 2px;
+    display: block;
+}
+
+.cd-status-badge .ant-badge-status-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4f6ef7;
+}
+
+/* ---- Cards ---- */
+.cd-card {
+    border-radius: 12px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    margin-bottom: 16px !important;
+    overflow: hidden;
+}
+
+.cd-card .ant-card-body {
+    padding: 20px;
+}
+
+/* ---- Section Label ---- */
+.cd-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cd-section-icon {
+    color: #4f6ef7;
+    font-size: 14px;
+}
+
+.cd-count-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef0fe;
+    color: #4f6ef7;
+    border-radius: 20px;
+    padding: 1px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* ---- Card Header ---- */
+.cd-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.cd-card-header--wrap {
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.cd-payment-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ---- Info Grid ---- */
+.cd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+}
+
+.cd-info-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 3px;
+}
+
+.cd-info-item:nth-last-child(-n+3) {
+    border-bottom: none;
+}
+
+.cd-info-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8c8c8c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cd-info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+/* ---- Buttons ---- */
+.cd-btn-primary {
+    background: #4f6ef7 !important;
+    border-color: #4f6ef7 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    height: 36px !important;
+}
+
+.cd-btn-primary:hover {
+    background: #3d5ce0 !important;
+    border-color: #3d5ce0 !important;
+}
+
+.cd-btn-success {
+    background: #f6ffed !important;
+    border-color: #b7eb8f !important;
+    color: #52c41a !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    height: 36px !important;
+}
+
+.cd-btn-success:hover {
+    background: #d9f7be !important;
+    border-color: #73d13d !important;
+}
+
+/* ---- Table ---- */
+.cd-table .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cd-table .ant-table-thead > tr > th {
+    background: #fafafa;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8c8c8c;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 12px;
+}
+
+.cd-table .ant-table-tbody > tr > td {
+    padding: 12px;
+    border-bottom: 1px solid #f8f8f8;
+    font-size: 14px;
+}
+
+.cd-table .ant-table-tbody > tr:hover > td {
+    background: #f8f9ff !important;
+}
+
+/* ---- Stats ---- */
+.cd-stats-row {
+    margin-bottom: 4px;
+}
+
+.cd-stat {
+    border-radius: 10px;
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.cd-stat--green {
+    background: #f6ffed;
+    border: 1px solid #d9f7be;
+}
+
+.cd-stat--amber {
+    background: #fff7e6;
+    border: 1px solid #ffe7ba;
+}
+
+.cd-stat--blue {
+    background: #f0f5ff;
+    border: 1px solid #d6e4ff;
+}
+
+.cd-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    display: block;
+    white-space: nowrap;
+}
+
+.cd-stat--green .cd-stat-value { color: #52c41a; }
+.cd-stat--amber .cd-stat-value { color: #fa8c16; }
+.cd-stat--blue .cd-stat-value  { color: #4f6ef7; font-size: 14px; }
+
+.cd-stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.cd-stat--green .cd-stat-label { color: #52c41a; }
+.cd-stat--amber .cd-stat-label { color: #fa8c16; }
+.cd-stat--blue  .cd-stat-label { color: #4f6ef7; }
+
+/* ---- Payment Rows ---- */
+.cd-payment-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    gap: 8px;
+}
+
+.cd-payment-row--paid {
+    background: #f9fef5;
+    border-color: #e6f7d6;
+}
+
+.cd-payment-row--pending {
+    background: #fffef5;
+    border-color: #fdf3d4;
+}
+
+.cd-payment-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.cd-payment-info {
+    min-width: 0;
+}
+
+.cd-payment-info .ant-typography {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.cd-payment-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* ---- Switches ---- */
+.cd-switch--paid .ant-switch-handle::before {
+    background: #52c41a;
+}
+
+/* ---- Empty State ---- */
+.cd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 8px;
+    color: #bfbfbf;
+}
+
+.cd-empty-icon {
+    font-size: 32px;
+    color: #d9d9d9;
+}
+
+/* ---- Modal ---- */
+.cd-modal .ant-modal-header {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 14px;
+    margin-bottom: 0;
+}
+
+.cd-modal .ant-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.cd-modal .ant-form-item-label > label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* ============================================
+   Responsive Breakpoints
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .cd-header {
+        padding: 0 16px;
+    }
+
+    .cd-content {
+        padding: 16px 12px 32px;
+    }
+
+    .cd-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cd-info-item:nth-last-child(-n+3) {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cd-info-item:nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+
+    .cd-stat-value {
+        font-size: 15px;
+    }
+
+    .cd-stat--blue .cd-stat-value {
+        font-size: 12px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .cd-brand-name {
+        display: none;
+    }
+
+    .cd-btn-label {
+        display: none;
+    }
+
+    .cd-btn-ghost {
+        padding: 0 8px !important;
+        min-width: 32px;
+    }
+
+    .cd-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cd-page-title {
+        font-size: 18px !important;
+    }
+
+    .cd-info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .cd-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cd-card-header--wrap {
+        flex-direction: column;
+    }
+
+    .cd-payment-controls {
+        width: 100%;
+    }
+
+    .cd-payment-controls .ant-select {
+        flex: 1;
+        min-width: 0 !important;
+    }
+
+    .cd-btn-success {
+        width: 100%;
+    }
+
+    .cd-stat {
+        padding: 10px 6px;
+    }
+
+    .cd-stat-value {
+        font-size: 14px;
+    }
+
+    .cd-stat--blue .cd-stat-value {
+        font-size: 11px;
+    }
+
+    .cd-stat-label {
+        font-size: 10px;
+    }
+
+    .cd-payment-row {
+        padding: 10px 10px;
+    }
+
+    .cd-table .ant-table-thead > tr > th,
+    .cd-table .ant-table-tbody > tr > td {
+        padding: 10px 8px;
+    }
+
+    .cd-card .ant-card-body {
+        padding: 16px;
+    }
+}
