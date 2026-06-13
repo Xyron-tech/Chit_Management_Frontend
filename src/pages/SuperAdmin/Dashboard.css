@@ -573,7 +573,7 @@
   letter-spacing: 0.5px;
   font-family: 'Poppins', sans-serif !important;
 }
-.sa-form .ant-input,
+
 .sa-form .ant-input-password,
 .sa-form .ant-select-selector {
   height: 38px !important;
