@@ -80,7 +80,6 @@ const Login = () => {
 
         <div className="login-left">
           <div className="brand-content">
-            <h1>ChitSaaS</h1>
             <p>
               Smart Chit Fund Management Platform
             </p>
@@ -157,7 +156,7 @@ const Login = () => {
             </div>
 
             <div className="footer-text">
-              © 2026 ChitSaaS. All rights reserved.
+              © 2026 Chit. All rights reserved.
             </div>
 
           </div>

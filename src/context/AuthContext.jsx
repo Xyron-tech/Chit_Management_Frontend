@@ -27,8 +27,18 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Merge partial fields (e.g. a newly uploaded profilePicture) into the
+  // current user without requiring a full re-login.
+  const updateUser = (updatedFields) => {
+    setUser(prev => {
+      const updated = { ...prev, ...updatedFields };
+      localStorage.setItem('user', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
