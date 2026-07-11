@@ -182,12 +182,11 @@ const ChitDetail = () => {
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   };
 
-  // Find if this month is already prized by someone else
-  const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
-    return chit?.members?.find(
-      m => m.prizedMonth?.includes(month) && m._id !== excludeMemberId
-    );
-  };
+const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
+  return chit?.members?.find(
+    m => Array.isArray(m.prizedMonth) && m.prizedMonth.includes(month) && m._id !== excludeMemberId
+  );
+};
 
   // ===== Unified Member + Payment Table Columns =====
   const memberColumns = [
