@@ -25,10 +25,10 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 const TenantDashboard = () => {
-  const [chits, setChits]         = useState([]);
-  const [loading, setLoading]     = useState(false);
+  const [chits, setChits] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editChit, setEditChit]   = useState(null);
+  const [editChit, setEditChit] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -68,9 +68,9 @@ const TenantDashboard = () => {
   const stats = useMemo(() => {
     const totalValue = chits.reduce((sum, c) => sum + (c.chitAmount || 0), 0);
     return {
-      total:      chits.length,
-      active:     chits.filter(c => c.status === 'active').length,
-      completed:  chits.filter(c => c.status === 'completed').length,
+      total: chits.length,
+      active: chits.filter(c => c.status === 'active').length,
+      completed: chits.filter(c => c.status === 'completed').length,
       totalValue,
     };
   }, [chits]);
@@ -95,7 +95,7 @@ const TenantDashboard = () => {
     form.setFieldsValue({
       ...chit,
       startDate: dayjs(chit.startDate),
-      endDate:   dayjs(chit.endDate),
+      endDate: dayjs(chit.endDate),
     });
     setModalOpen(true);
   };
@@ -106,7 +106,7 @@ const TenantDashboard = () => {
       const payload = {
         ...values,
         startDate: values.startDate.toISOString(),
-        endDate:   values.endDate.toISOString(),
+        endDate: values.endDate.toISOString(),
       };
 
       if (editChit) {
@@ -175,7 +175,7 @@ const TenantDashboard = () => {
         email: values.email,
         imageFile: avatarFile,
       });
-      console.log(data,"Data")
+      console.log(data, "Data")
       updateUser(data.user);
       message.success('Profile updated');
       setProfileModalOpen(false);
@@ -208,7 +208,7 @@ const TenantDashboard = () => {
     {
       title: 'Type',
       dataIndex: 'chitType',
-       align: 'center',
+      align: 'center',
       render: (type) => (
         <Tag className={`chit-type-tag ${type}`} bordered={false}>
           {type === 'auction'
@@ -258,7 +258,7 @@ const TenantDashboard = () => {
     {
       title: 'Installment',
       dataIndex: 'installmentAmount',
-       align: 'center',
+      align: 'center',
       sorter: (a, b) => a.installmentAmount - b.installmentAmount,
       render: (amt) => (
         <Text className="amount-secondary">{currency(amt)}</Text>
@@ -267,7 +267,7 @@ const TenantDashboard = () => {
     {
       title: 'Start Date',
       dataIndex: 'startDate',
-       align: 'center',
+      align: 'center',
       render: (date) => (
         <Text type="secondary">{new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</Text>
       )
@@ -275,7 +275,7 @@ const TenantDashboard = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-       align: 'center',
+      align: 'center',
       filters: [
         { text: 'Active', value: 'active' },
         { text: 'Completed', value: 'completed' },
@@ -293,7 +293,7 @@ const TenantDashboard = () => {
       title: 'Actions',
       key: 'actions',
       fixed: 'right',
-       align: 'center',
+      align: 'center',
       width: 96,
       render: (_, record) => (
         <Space size={4} onClick={e => e.stopPropagation()}>
@@ -379,23 +379,28 @@ const TenantDashboard = () => {
           </Button>
         </div>
 
-        {/* Stats */}
         <Row gutter={16} className="tenant-stats-row">
           {[
-            { label: 'Total Chits', value: stats.total, icon: <FileTextOutlined />, cls: 'navy' },
-            { label: 'Active', value: stats.active, icon: <CheckCircleFilled />, cls: 'green', trend: true },
-            { label: 'Completed', value: stats.completed, icon: <FlagFilled />, cls: 'amber' },
-            { label: 'Total Value', value: currency(stats.totalValue), icon: <BankOutlined />, cls: 'gold' },
-          ].map((stat, i) => (
+            { label: 'Total Chits', value: stats.total, icon: <FileTextOutlined />, cls: 'navy', color:'#568ee9' },
+            { label: 'Active', value: stats.active, icon: <CheckCircleFilled />, cls: 'green', color: 'rgb(10 130 79)', trend: true },
+            { label: 'Completed', value: stats.completed, icon: <FlagFilled />, cls: 'amber', color: 'rgb(161 102 225)' },
+            { label: 'Total Value', value: currency(stats.totalValue), icon: <BankOutlined />, cls: 'gold', color: 'rgb(225 158 53)' },
+          ]?.map((stat, i) => (
             <Col xs={24} sm={12} lg={6} key={i}>
-              <Card className="tenant-stat-card" bordered={false}>
+              <Card
+                className="tenant-stat-card"
+                bordered={false}
+                style={{ background: `${stat?.color}` }}   // ← card background, ~8% opacity of the theme color
+              >
                 <div className="tenant-stat-inner">
-                  <div className={`tenant-stat-icon ${stat.cls}`}>
-                    {stat.icon}
+                  <div
+                    className={`tenant-stat-icon ${stat?.cls}`}
+                  >
+                    {stat?.icon}
                   </div>
                   <div className="tenant-stat-info">
-                    <Text className="tenant-stat-label">{stat.label}</Text>
-                    <h3 className="tenant-stat-value">{stat.value}</h3>
+                    <Text className="tenant-stat-label">{stat?.label}</Text>
+                    <h3 className="tenant-stat-value" >{stat?.value}</h3>
                   </div>
                 </div>
               </Card>

@@ -312,6 +312,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   border: 1px solid var(--ink-200);
+  margin-bottom: 10px;
 }
 
 .tenant-stat-card .ant-card-body {
@@ -348,15 +349,15 @@
 }
 
 .tenant-stat-label.ant-typography {
-  font-size: 12.5px;
-  color: var(--ink-600);
+  font-size: 16px;
   font-weight: 500;
+  color: white;
 }
 
 .tenant-stat-value {
   font-size: 22px;
   font-weight: 700;
-  color: var(--ink-900);
+  color: white;
   margin: 0;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
@@ -396,6 +397,7 @@
   width: 260px;
   border-radius: var(--radius-sm);
   border-color: var(--ink-200);
+  font-size: 15px;
 }
 
 .tenant-table-divider.ant-divider {
@@ -423,10 +425,12 @@
 .tenant-table .ant-table-tbody > tr > td {
   padding: 14px 16px;
   border-bottom: 1px solid var(--ink-100);
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--ink-800);
   white-space: nowrap;
   vertical-align: middle;
+  text-transform: capitalize;
+  font-weight: 500;
 }
 
 .tenant-table-row {
@@ -502,8 +506,9 @@
 }
 
 .chit-type-tag.tallu {
-  background: #eef1f8;
+  background: #efd633;
   color: var(--navy);
+  font-size: 16px;
 }
 
 .chit-status-tag {
@@ -737,6 +742,7 @@
 
   .tenant-search.ant-input-affix-wrapper {
     width: 100%;
+    font-size: 15px;
   }
 }
 

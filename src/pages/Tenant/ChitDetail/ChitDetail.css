@@ -1,5 +1,3 @@
-
-
 :root {
   --ink-900: #0f1729;
   --ink-800: #1c2740;
@@ -153,6 +151,7 @@
   box-shadow: var(--shadow-card);
   border: 1px solid var(--ink-200);
   margin-bottom: 20px;
+  background-color: #d0dbe27d;
 }
 
 .cd-info-header {
@@ -163,12 +162,22 @@
   gap: 10px;
 }
 
+.cd-info-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .cd-info-title.ant-typography {
   color: var(--ink-900);
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0 0 8px 0;
+  text-transform: capitalize;
 }
 
 .cd-info-divider.ant-divider {
@@ -189,15 +198,15 @@
 }
 
 .cd-info-label.ant-typography {
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--ink-400);
+  color: #1677ff;
 }
 
 .cd-info-value.ant-typography {
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--ink-900);
   font-variant-numeric: tabular-nums;
@@ -211,6 +220,7 @@
   box-shadow: var(--shadow-card);
   border: 1px solid var(--ink-200);
   margin-bottom: 20px;
+  background-color: #d0dbe27d;
 }
 
 .cd-card-header {
@@ -246,6 +256,12 @@
   border-radius: 999px;
 }
 
+.cd-card-title-month {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+
 .cd-add-btn.ant-btn {
   font-weight: 600;
 }
@@ -253,6 +269,17 @@
 .cd-add-btn.ant-btn:hover:not(:disabled) {
   background: var(--navy-light) !important;
   border-color: var(--navy-light) !important;
+}
+
+/* ---------------- Month + Mark All row ---------------- */
+
+.cd-month-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 /* ---------------- Members table ---------------- */
@@ -285,6 +312,10 @@
   color: var(--ink-900);
 }
 
+.member-phone-inline {
+  font-size: 12px;
+}
+
 .amount-secondary {
   color: var(--gold-dark);
   font-variant-numeric: tabular-nums;
@@ -310,6 +341,31 @@
   background: var(--danger-bg) !important;
 }
 
+/* Payment status checkbox (replaces old switch) */
+.checkbox-paid .ant-checkbox-inner {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+.checkbox-paid .ant-checkbox + span {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.checkbox-pending .ant-checkbox + span {
+  color: var(--ink-600);
+  font-weight: 500;
+}
+
+/* Prized row highlight in table */
+.prized-row td {
+  background-color: var(--gold-light) !important;
+}
+
+.prized-row:hover td {
+  background-color: #efdcb8 !important;
+}
+
 /* ---------------- Tags ---------------- */
 
 .chit-type-tag {
@@ -320,12 +376,14 @@
 }
 
 .chit-type-tag.auction {
-  background: var(--gold-light);
-  color: var(--gold-dark);
+  font-size: 16px;
+  background: #d5aee2;
+  color: #161514;
 }
 
 .chit-type-tag.tallu {
-  background: #eef1f8;
+  font-size: 16px;
+  background: #efd633;
   color: var(--navy);
 }
 
@@ -373,17 +431,17 @@
 }
 
 .cd-stat-box.paid {
-  background: var(--success-bg);
+  background:#32b167;
   border-color: #b7ebc6;
 }
 
 .cd-stat-box.pending {
-  background: var(--warning-bg);
+  background: #e8c252;
   border-color: #fde2b0;
 }
 
 .cd-stat-box.collected {
-  background: var(--gold-light);
+  background: #9d54b1;
   border-color: #e6d3ac;
 }
 
@@ -395,21 +453,21 @@
   margin-bottom: 2px;
 }
 
-.cd-stat-box.paid .cd-stat-box-value      { color: var(--success); }
-.cd-stat-box.pending .cd-stat-box-value   { color: var(--warning); }
-.cd-stat-box.collected .cd-stat-box-value { color: var(--gold-dark); }
+.cd-stat-box.paid .cd-stat-box-value      { color: #ececec; }
+.cd-stat-box.pending .cd-stat-box-value    { color: #ececec; }
+.cd-stat-box.collected .cd-stat-box-value  { color: #ececec; }
 
 .cd-stat-box-label.ant-typography {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 5px;
 }
 
-.cd-stat-box.paid .cd-stat-box-label      { color: var(--success); }
-.cd-stat-box.pending .cd-stat-box-label   { color: var(--warning); }
-.cd-stat-box.collected .cd-stat-box-label { color: var(--gold-dark); }
+.cd-stat-box.paid .cd-stat-box-label      { color: #f2f2f2; }
+.cd-stat-box.pending .cd-stat-box-label    { color: #f2f2f2; }
+.cd-stat-box.collected .cd-stat-box-label  { color: #f2f2f2; }
 
 .cd-payments-divider.ant-divider {
   margin: 4px 0 16px;
@@ -526,6 +584,54 @@
   border-color: var(--navy-light) !important;
 }
 
+/* ============================================
+   Mobile Member Card List (replaces table < md)
+============================================ */
+
+.mobile-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-member-card {
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-member-card.prized {
+  background: var(--gold-light);
+  border-color: var(--gold);
+}
+
+.mmc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mmc-divider.ant-divider {
+  margin: 10px 0 8px;
+  border-color: var(--ink-100);
+}
+
+.mmc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--ink-800);
+}
+
+.mmc-row:not(:last-child) {
+  border-bottom: 1px dashed var(--ink-100);
+}
+
 /* ---------------- Responsive ---------------- */
 
 @media (max-width: 768px) {
@@ -535,7 +641,8 @@
   }
 
   .cd-content {
-    padding: 20px 16px 40px;
+    padding: 16px;
+    max-width: 100%;
   }
 
   .cd-btn-label {
@@ -547,32 +654,141 @@
     padding: 0 10px;
   }
 
+  /* ---- Unify card sizing so every block lines up edge-to-edge ---- */
+  .cd-info-card.ant-card,
+  .cd-members-card.ant-card,
+  .cd-payments-card.ant-card {
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 14px;
+  }
+
+  .cd-info-card .ant-card-body,
+  .cd-members-card .ant-card-body,
+  .cd-payments-card .ant-card-body {
+    padding: 16px;
+  }
+
+  /* ---- Info grid: even 2-column layout, label/value aligned ---- */
+  .cd-info-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
   .cd-info-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 12px;
+  }
+
+  .cd-info-item {
+    min-width: 0;
+  }
+
+
+  .cd-info-value.ant-typography {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .cd-info-title.ant-typography {
+    font-size: 17px;
   }
 
   .cd-card-header {
-    flex-direction: column;
     align-items: stretch;
+  }
+
+
+  .cd-card-header-mobile .cd-header-actions .ant-space-item {
+    width: 100%;
   }
 
   .cd-add-btn.ant-btn {
     width: 100%;
     justify-content: center;
+    height: 40px;
+    box-sizing: border-box;
   }
 
-  .cd-month-select.ant-select {
+  /* Month select + Mark All row — stack full width on mobile so nothing overflows */
+  .cd-month-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
     width: 100%;
+    margin-top: 30px;
+  }
+
+  .cd-month-actions-row .cd-month-select.ant-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cd-month-actions-row .ant-select-selector {
+    height: 40px !important;
+    align-items: center;
+  }
+
+  .cd-month-actions-row .mark-all-btn.ant-btn {
+    width: 100%;
+    justify-content: center;
+    height: 40px;
+  }
+
+  /* ---- Stat boxes: identical width, height, spacing ---- */
+  .cd-payment-stats {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .cd-payment-stats .ant-col {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .cd-stat-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    min-height: 48px;
   }
 
   .cd-stat-box-value.ant-typography {
     font-size: 18px;
+    margin-bottom: 0;
+  }
+
+  .cd-stat-box-label.ant-typography {
+    font-size: 13px;
   }
 
   .payment-row {
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .cd-modal .ant-modal-content {
+    padding: 18px;
+  }
+
+  /* ---- Mobile member cards — consistent width with parent card ---- */
+  .mobile-member-list,
+  .mobile-member-card {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
