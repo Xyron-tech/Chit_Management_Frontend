@@ -93,7 +93,6 @@ export default function ChitDashboard() {
 
   return (
     <div className="dash">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-brand">
           <div className="sidebar-brand-mark">C</div>
