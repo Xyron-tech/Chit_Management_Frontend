@@ -3,8 +3,9 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login/Login';
 import SuperAdminDashboard from './pages/SuperAdmin/Dashboard';
-import TenantDashboard from './pages/Tenant/Dashboard/Dashboard';
+import Dashboard from './pages/Tenant/Dashboard/Dashboard';
 import ChitDetail from './pages/Tenant/ChitDetail/ChitDetail';
+import Home from './pages/Home/Home'
 
 function App() {
   return (
@@ -20,9 +21,15 @@ function App() {
             </PrivateRoute>
           } />
 
+<Route path="/home" element={
+            <PrivateRoute role="tenant_admin">
+              <Home />
+            </PrivateRoute>
+          } />
+
           <Route path="/dashboard" element={
             <PrivateRoute role="tenant_admin">
-              <TenantDashboard />
+              <Dashboard />
             </PrivateRoute>
           } />
 

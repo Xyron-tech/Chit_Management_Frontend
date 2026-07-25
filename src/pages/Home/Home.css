@@ -1,0 +1,421 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.dash {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f3ed;
+  color: #1e2233;
+}
+
+
+.sidebar {
+  width: 236px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #161a30 0%, #1f2547 100%);
+  color: #e7e7ef;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 18px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 28px;
+}
+
+.sidebar-brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #e3ba45, #a87e12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #161a30;
+  font-size: 15px;
+}
+
+.sidebar-brand-name {
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: #b7b9cc;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  border-left: 3px solid transparent;
+  width: 100%;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+  background: rgba(201, 162, 39, 0.16);
+  color: #e3ba45;
+  border-left: 3px solid #e3ba45;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.sidebar-footer-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 12.5px;
+  color: #9ea1b8;
+  line-height: 1.5;
+}
+
+.sidebar-footer-card strong {
+  color: #e7e7ef;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ---------------- Main ---------------- */
+
+.main {
+  flex: 1;
+  padding: 26px 34px;
+  max-width: 1180px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.topbar-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.topbar-subtitle {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: #767a8c;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e7e3d6;
+  border-radius: 10px;
+  padding: 8px 14px;
+  width: 230px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  width: 100%;
+  background: transparent;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid #e7e3d6;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.icon-btn .dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: #c2483d;
+}
+
+.avatar-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #e3ba45, #a87e12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #161a30;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ---------------- Stat cards ---------------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  border: 1px solid #ece8da;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  color: #8a8d9e;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1e2233;
+  margin-bottom: 6px;
+}
+
+.stat-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat-trend.up {
+  color: #2f8f5b;
+}
+
+.stat-trend.down {
+  color: #c2483d;
+}
+
+/* ---------------- Content grid ---------------- */
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 18px;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #ece8da;
+  padding: 20px 22px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  font-size: 15.5px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.new-chit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #a87e12;
+  background: #fbf3df;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+/* ---------------- Chit pot rows ---------------- */
+
+.chit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chit-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 6px;
+  border-bottom: 1px solid #f1eee3;
+}
+
+.chit-row:last-child {
+  border-bottom: none;
+}
+
+.chit-name {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.chit-meta {
+  font-size: 12.5px;
+  color: #8a8d9e;
+  margin-top: 2px;
+}
+
+.chit-info {
+  flex: 1;
+}
+
+.chit-amounts {
+  text-align: right;
+}
+
+.chit-collected {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.chit-target {
+  font-size: 11.5px;
+  color: #b0b2c0;
+}
+
+.risk-dot {
+  margin-right: 6px;
+}
+
+/* ---------------- Pot ring ---------------- */
+
+.pot-ring-wrap {
+  position: relative;
+}
+
+.pot-ring-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+  color: #1e2233;
+}
+
+/* ---------------- Recent activity ---------------- */
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 4px;
+  border-bottom: 1px solid #f1eee3;
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-name {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.activity-meta {
+  font-size: 12px;
+  color: #9498a8;
+}
+
+.activity-amount {
+  text-align: right;
+}
+
+.activity-amount-value {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* ---------------- Status pill ---------------- */
+
+.pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+}
+
+.pill-paid {
+  background: #e7f3ec;
+  color: #2f8f5b;
+}
+
+.pill-pending {
+  background: #fbf0df;
+  color: #c97a1e;
+}
+
+.pill-overdue {
+  background: #fae8e6;
+  color: #c2483d;
+}

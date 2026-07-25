@@ -49,7 +49,7 @@ const Login = () => {
       if (data.user.role === "super_admin") {
         navigate("/superadmin/dashboard");
       } else {
-        navigate("/dashboard");
+        navigate("/home");
       }
     } catch (err) {
       const errData = err.response?.data;

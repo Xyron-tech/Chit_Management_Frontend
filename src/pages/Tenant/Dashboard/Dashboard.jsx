@@ -24,7 +24,7 @@ const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const TenantDashboard = () => {
+const Dashboard = () => {
   const [chits, setChits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -737,4 +737,4 @@ const TenantDashboard = () => {
   );
 };
 
-export default TenantDashboard;
+export default Dashboard;
