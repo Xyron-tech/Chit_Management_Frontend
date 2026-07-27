@@ -72,7 +72,7 @@ const ProfilePage = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setProfile(data.user);
+      setProfile(data?.user);
       message.success('Profile picture updated');
     } catch (err) {
       message.error(err.response?.data?.message || 'Unable to update picture.');
@@ -140,8 +140,12 @@ const ProfilePage = () => {
       <Card className="pf-card" bordered={false}>
         <div className="pf-avatar-row">
           <div className="pf-avatar-wrap">
-            <Avatar size={84} src={profile?.profilePicture?.url} className="pf-avatar">
-              {!profile?.profilePicture?.url && profile?.name?.[0]?.toUpperCase()}
+            <Avatar
+              size={84}
+              src={profile?.profilePicture?.url || undefined}
+              className="pf-avatar"
+            >
+              {getInitials(profile?.name)}
             </Avatar>
             <Upload
               showUploadList={false}

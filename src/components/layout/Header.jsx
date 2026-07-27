@@ -3,15 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, UserCircle2, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import "./Header.css";
-import {Avatar} from 'antd';
+import { Avatar } from 'antd';
 
 // Path -> { title, subtitle } shown in the header.
 // Add an entry here whenever you add a new page under Layout.
 const PAGE_META = {
-  "/dashboard": { title: "Dashboard",  },
-  "/chit": { title: "Chit Pools",  },
+  "/dashboard": { title: "Dashboard", },
+  "/chit": { title: "Chit Pools", },
   "/analytics": { title: "Analytics", },
-  "/profile": { title: "Profile Info",  },
+  "/profile": { title: "Profile Info", },
 };
 
 const getInitials = (name) => {
@@ -57,6 +57,7 @@ export default function Header() {
     setMenuOpen(false);
     navigate("/profile");
   };
+  console.log(user, "user")
   return (
     <div className="topbar">
       <div>
@@ -73,8 +74,15 @@ export default function Header() {
             style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer" }}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            <Avatar size={50} src={user.profilePicture?.url} className="pf-avatar">
+            {/* <Avatar size={50} src={user.profilePicture?.url} className="pf-avatar">
               {!user.profilePicture?.url && profile.name?.[0]?.toUpperCase()}
+            </Avatar> */}
+            <Avatar
+              size={50}
+              src={user?.profilePicture?.url || undefined}
+              className="pf-avatar"
+            >
+              {getInitials(user?.name)}
             </Avatar>
             <ChevronDown size={15} color="#767A8C" />
           </button>
