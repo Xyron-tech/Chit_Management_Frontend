@@ -29,119 +29,34 @@
   --radius-md: 10px;
   --radius-lg: 14px;
 
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-.cd-layout {
-  min-height: 100vh;
-  background: var(--page-bg);
-  font-family: var(--font-ui);
 }
 
 .cd-loading-screen {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: var(--page-bg);
+  height: 60vh;
 }
 
-/* ---------------- Header ---------------- */
+/* ---------------- Content ---------------- */
 
-.cd-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--navy);
-  padding: 0 32px;
-  height: 68px;
-  line-height: normal;
-  box-shadow: var(--shadow-md);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.cd-header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.cd-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(155deg, var(--gold) 0%, var(--gold-dark) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--navy);
-  font-size: 19px;
-  flex-shrink: 0;
-}
-
-.cd-header-title.ant-typography {
-  color: #ffffff;
-  font-size: 17px;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-.cd-header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.cd-content {
+  width: 100%;
 }
 
 .cd-back-btn.ant-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
+  background: var(--surface);
+  border: 1px solid var(--ink-200);
+  color: var(--ink-600);
   border-radius: var(--radius-sm);
   font-weight: 500;
   font-size: 13px;
 }
 
 .cd-back-btn.ant-btn:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
-}
-
-.cd-logout-btn.ant-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: rgba(255, 255, 255, 0.85);
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.cd-logout-btn.ant-btn:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: #ffffff !important;
-}
-
-/* ---------------- Content ---------------- */
-
-.cd-content {
-  padding: 28px 32px 48px;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.cd-breadcrumb {
-  margin-bottom: 16px;
-  font-size: 13px;
-}
-
-.cd-breadcrumb .ant-breadcrumb-link {
-  color: var(--ink-600);
+  background: var(--ink-100) !important;
+  border-color: var(--ink-200) !important;
+  color: var(--navy) !important;
 }
 
 /* ---------------- Info card ---------------- */
@@ -279,12 +194,11 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 15px;
-  flex-wrap: wrap;
 }
 
 /* ---------------- Members table ---------------- */
 
-.cd-table .ant-table-thead > tr > th {
+.cd-table .ant-table-thead>tr>th {
   background: var(--page-bg);
   color: var(--ink-600);
   font-size: 12px;
@@ -294,7 +208,7 @@
   border-bottom: 1px solid var(--ink-200);
 }
 
-.cd-table .ant-table-tbody > tr > td {
+.cd-table .ant-table-tbody>tr>td {
   border-bottom: 1px solid var(--ink-100);
   font-size: 13.5px;
   color: var(--ink-800);
@@ -306,6 +220,8 @@
   color: var(--gold-light);
   font-weight: 700;
   font-size: 12px;
+  width: 80px;
+  height: fit-content;
 }
 
 .member-name-text {
@@ -327,7 +243,7 @@
 }
 
 .row-action-btn.ant-btn {
-  color: var(--ink-400);
+  color: black;
   border-radius: var(--radius-sm);
 }
 
@@ -347,23 +263,46 @@
   border-color: var(--success);
 }
 
-.checkbox-paid .ant-checkbox + span {
+.checkbox-paid .ant-checkbox+span {
   color: var(--success);
   font-weight: 600;
 }
 
-.checkbox-pending .ant-checkbox + span {
+.checkbox-pending .ant-checkbox+span {
   color: var(--ink-600);
   font-weight: 500;
 }
 
-/* Prized row highlight in table */
+/* Prized row highlight in table — matches the mobile prized card color */
 .prized-row td {
-  background-color: var(--gold-light) !important;
+  background-color: #3d7c48 !important;
+  border-bottom-color: #34693e !important;
 }
 
 .prized-row:hover td {
-  background-color: #efdcb8 !important;
+  background-color: #366e40 !important;
+}
+
+.prized-row .ant-checkbox-inner {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.prized-row .checkbox-paid .ant-checkbox + span {
+  color: #ffffff !important;
+}
+
+.prized-row .checkbox-pending .ant-checkbox + span {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.prized-row .payment-date.ant-typography {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+.prized-row .row-action-btn.ant-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ---------------- Tags ---------------- */
@@ -398,7 +337,7 @@
 /* ---------------- Payments ---------------- */
 
 .cd-month-select.ant-select {
-  min-width: 220px;
+  min-width: 100px;
 }
 
 .cd-month-select .ant-select-selector {
@@ -420,6 +359,7 @@
 
 .cd-payment-stats {
   margin-bottom: 4px;
+  gap: 10px;
 }
 
 .cd-stat-box {
@@ -431,7 +371,7 @@
 }
 
 .cd-stat-box.paid {
-  background:#32b167;
+  background: #32b167;
   border-color: #b7ebc6;
 }
 
@@ -453,9 +393,17 @@
   margin-bottom: 2px;
 }
 
-.cd-stat-box.paid .cd-stat-box-value      { color: #ececec; }
-.cd-stat-box.pending .cd-stat-box-value    { color: #ececec; }
-.cd-stat-box.collected .cd-stat-box-value  { color: #ececec; }
+.cd-stat-box.paid .cd-stat-box-value {
+  color: #ececec;
+}
+
+.cd-stat-box.pending .cd-stat-box-value {
+  color: #ececec;
+}
+
+.cd-stat-box.collected .cd-stat-box-value {
+  color: #ececec;
+}
 
 .cd-stat-box-label.ant-typography {
   font-size: 16px;
@@ -465,9 +413,17 @@
   gap: 5px;
 }
 
-.cd-stat-box.paid .cd-stat-box-label      { color: #f2f2f2; }
-.cd-stat-box.pending .cd-stat-box-label    { color: #f2f2f2; }
-.cd-stat-box.collected .cd-stat-box-label  { color: #f2f2f2; }
+.cd-stat-box.paid .cd-stat-box-label {
+  color: #f2f2f2;
+}
+
+.cd-stat-box.pending .cd-stat-box-label {
+  color: #f2f2f2;
+}
+
+.cd-stat-box.collected .cd-stat-box-label {
+  color: #f2f2f2;
+}
 
 .cd-payments-divider.ant-divider {
   margin: 4px 0 16px;
@@ -549,9 +505,57 @@
   font-size: 13px;
   margin-top: 4px;
   margin-bottom: 20px;
+  }
+
+/* ---------------- Member photo upload (Add/Edit Member modal) ---------------- */
+
+.member-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  justify-content: center;
 }
 
-.cd-modal-form .ant-form-item-label > label {
+.member-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.member-avatar.ant-avatar {
+  background: var(--navy);
+  color: var(--gold-light);
+  font-size: 26px;
+  font-weight: 700;
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.member-avatar-edit-btn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  background: var(--gold-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.member-avatar-edit-btn:hover {
+  background: var(--navy);
+  transform: scale(1.05);
+}
+
+.cd-modal-form .ant-form-item-label>label {
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-800);
@@ -598,13 +602,13 @@
   border: 1px solid var(--ink-200);
   border-radius: var(--radius-md);
   padding: 14px 16px;
-  background: var(--surface);
+  background: #ffffff;
   box-shadow: var(--shadow-sm);
 }
 
 .mobile-member-card.prized {
-  background: var(--gold-light);
-  border-color: var(--gold);
+  background: #3d7c48;
+  border-color: #34693e;
 }
 
 .mmc-top {
@@ -612,6 +616,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
+  margin-bottom: 10px;
 }
 
 .mmc-divider.ant-divider {
@@ -628,20 +633,115 @@
   color: var(--ink-800);
 }
 
-.mmc-row:not(:last-child) {
-  border-bottom: 1px dashed var(--ink-100);
+.ant-col-xs-24 {
+  flex: 0% !important;
+}
+
+/* ---------------- Prized Member Spotlight ---------------- */
+
+.prized-spotlight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #d0dbe27d;
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.prized-spotlight-avatar.ant-avatar {
+  background: var(--navy);
+  color: var(--gold-light);
+  font-weight: 700;
+  font-size: 22px;
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.prized-spotlight-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.prized-spotlight-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gold-dark);
+  margin-bottom: 2px;
+}
+
+.prized-spotlight-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.prized-spotlight-meta {
+  font-size: 12.5px;
+  color: var(--ink-600);
+  margin-top: 2px;
+}
+
+.prized-spotlight-amount {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.prized-spotlight-amount-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-400);
+  margin-bottom: 3px;
+}
+
+.prized-spotlight-amount-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.whatsapp-reminder-btn.ant-btn {
+  color: #1a9c4a;
+  border-color: #bfe8cd;
+  background: #eefbf2;
+  font-weight: 600;
+}
+ 
+.whatsapp-reminder-btn.ant-btn:hover {
+  color: #128c39 !important;
+  border-color: #128c39 !important;
+  background: #e0f7e8 !important;
+}
+
+@media (max-width: 480px) {
+  .prized-spotlight {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+  }
+
+  .prized-spotlight-amount {
+    width: 100%;
+    text-align: left;
+    padding-top: 8px;
+    border-top: 1px dashed #e8d4ac;
+  }
 }
 
 /* ---------------- Responsive ---------------- */
 
 @media (max-width: 768px) {
-  .cd-header {
-    padding: 0 16px;
-    height: 60px;
-  }
-
   .cd-content {
-    padding: 16px;
+    padding: 0;
     max-width: 100%;
   }
 
@@ -649,12 +749,10 @@
     display: none;
   }
 
-  .cd-back-btn.ant-btn,
-  .cd-logout-btn.ant-btn {
+  .cd-back-btn.ant-btn {
     padding: 0 10px;
   }
 
-  /* ---- Unify card sizing so every block lines up edge-to-edge ---- */
   .cd-info-card.ant-card,
   .cd-members-card.ant-card,
   .cd-payments-card.ant-card {
@@ -671,7 +769,6 @@
     padding: 16px;
   }
 
-  /* ---- Info grid: even 2-column layout, label/value aligned ---- */
   .cd-info-header {
     flex-direction: column;
     align-items: flex-start;
@@ -687,7 +784,6 @@
     min-width: 0;
   }
 
-
   .cd-info-value.ant-typography {
     font-size: 14px;
     word-break: break-word;
@@ -701,7 +797,6 @@
     align-items: stretch;
   }
 
-
   .cd-card-header-mobile .cd-header-actions .ant-space-item {
     width: 100%;
   }
@@ -713,19 +808,9 @@
     box-sizing: border-box;
   }
 
-  /* Month select + Mark All row — stack full width on mobile so nothing overflows */
   .cd-month-actions-row {
-    flex-direction: column;
     align-items: stretch;
-    justify-content: flex-start;
-    gap: 10px;
-    width: 100%;
-    margin-top: 30px;
-  }
-
-  .cd-month-actions-row .cd-month-select.ant-select {
-    width: 100%;
-    min-width: 0;
+    margin-top: 16px;
   }
 
   .cd-month-actions-row .ant-select-selector {
@@ -734,24 +819,14 @@
   }
 
   .cd-month-actions-row .mark-all-btn.ant-btn {
-    width: 100%;
-    justify-content: center;
     height: 40px;
   }
 
-  /* ---- Stat boxes: identical width, height, spacing ---- */
   .cd-payment-stats {
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-  }
-
-  .cd-payment-stats .ant-col {
-    width: 100%;
-    max-width: 100%;
-    flex: 0 0 100%;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    align-items: center;
   }
 
   .cd-stat-box {
@@ -761,9 +836,11 @@
     margin-bottom: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     text-align: left;
     min-height: 48px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .cd-stat-box-value.ant-typography {
@@ -784,7 +861,6 @@
     padding: 18px;
   }
 
-  /* ---- Mobile member cards — consistent width with parent card ---- */
   .mobile-member-list,
   .mobile-member-card {
     width: 100%;
@@ -796,13 +872,46 @@
   .cd-info-grid {
     grid-template-columns: 1fr;
   }
+
+  .cd-payment-stats {
+    flex-direction: column;
+    align-items: unset;
+  }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .row-action-btn.ant-btn,
-  .cd-back-btn.ant-btn,
-  .cd-logout-btn.ant-btn {
+  .cd-back-btn.ant-btn {
     transition: none;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .cd-modal-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .cd-modal-footer > .ant-btn {
+    width: 100%;
+    height: 42px;
+  }
+
+  .cd-modal-footer .ant-space {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
+
+  .cd-modal-footer .ant-space .ant-btn {
+    flex: 1;
+    height: 42px;
+  }
+
+  .whatsapp-reminder-btn {
+    width: 100%;
   }
 }

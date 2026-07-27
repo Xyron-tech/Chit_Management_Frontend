@@ -1,4 +1,3 @@
-
 :root {
   /* Ink & neutrals */
   --ink-900: #0f1729;
@@ -40,7 +39,6 @@
 .tenant-layout {
   min-height: 100vh;
   background: var(--page-bg);
-  font-family: var(--font-ui);
 }
 
 /* ---------------- Header ---------------- */
@@ -249,13 +247,6 @@
 
 /* ---------------- Content ---------------- */
 
-.tenant-content {
-  padding: 28px 32px 48px;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-}
-
 .tenant-breadcrumb {
   margin-bottom: 14px;
   font-size: 13px;
@@ -268,7 +259,7 @@
 .tenant-page-header {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: end;
   margin-bottom: 24px;
   gap: 16px;
   flex-wrap: wrap;
@@ -302,17 +293,43 @@
   border-color: var(--navy-light) !important;
 }
 
+/* ---------------- Desktop static toolbar (New Chit button, above All Chits card) ---------------- */
+
+.tenant-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.tenant-new-chit-btn.ant-btn {
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  height: 42px;
+  padding: 0 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tenant-new-chit-btn.ant-btn:hover {
+  background: var(--navy-light) !important;
+  border-color: var(--navy-light) !important;
+}
+
 /* ---------------- Stat cards ---------------- */
 
 .tenant-stats-row {
   margin-bottom: 24px;
+  row-gap: 12px !important;
 }
 
 .tenant-stat-card.ant-card {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   border: 1px solid var(--ink-200);
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  height: 100%;
 }
 
 .tenant-stat-card .ant-card-body {
@@ -346,12 +363,17 @@
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  flex: 1;
 }
 
 .tenant-stat-label.ant-typography {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .tenant-stat-value {
@@ -449,6 +471,13 @@
   border-radius: var(--radius-sm);
 }
 
+.chit-table-thumb.ant-avatar {
+  border-radius: var(--radius-sm);
+  background: var(--ink-100);
+  color: var(--ink-400);
+  flex-shrink: 0;
+}
+
 .chit-name-cell {
   display: flex;
   flex-direction: column;
@@ -543,7 +572,62 @@
   background: var(--danger-bg);
 }
 
+/* ---------------- Chit image upload (Add/Edit Chit modal) ---------------- */
+
+.chit-image-upload-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 4px 0 20px;
+}
+
+.chit-image-upload {
+  position: relative;
+  cursor: pointer;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-md);
+}
+
+.chit-image-avatar.ant-avatar {
+  border-radius: var(--radius-md);
+  background: var(--gold-light);
+  color: var(--gold-dark);
+  font-size: 30px;
+  border: 3px solid var(--ink-100);
+}
+
+.chit-image-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 41, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.chit-image-upload:hover .chit-image-overlay {
+  opacity: 1;
+}
+
+.chit-image-hint.ant-typography {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-400);
+  margin-top: 8px;
+}
+
 /* ---------------- Modal / Form ---------------- */
+
+.tenant-modal.ant-modal {
+  max-width: calc(100vw - 24px);
+}
 
 .tenant-modal .ant-modal-content {
   border-radius: var(--radius-lg);
@@ -576,6 +660,11 @@
 .tenant-modal-form .ant-picker {
   border-radius: var(--radius-sm) !important;
   border-color: var(--ink-200) !important;
+}
+
+.tenant-modal-form .ant-input-number,
+.tenant-modal-form .ant-picker {
+  width: 100%;
 }
 
 .tenant-modal-footer {
@@ -639,6 +728,7 @@
   display: flex;
   gap: 8px;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .chit-mobile-card-grid {
@@ -654,6 +744,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .chit-mobile-stat:last-child {
@@ -668,16 +759,36 @@
   color: var(--ink-400);
 }
 
+/* Mobile-only floating FAB */
+.tenant-fab-btn.ant-btn {
+  position: fixed !important;
+  right: 18px;
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(22, 33, 62, 0.28);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  visibility: visible;
+  opacity: 1;
+}
+
+.tenant-fab-btn.ant-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(22, 33, 62, 0.34);
+}
+
 /* ---------------- Responsive ---------------- */
 
 @media (max-width: 768px) {
   .tenant-header {
     padding: 0 16px;
     height: 60px;
-  }
-
-  .tenant-content {
-    padding: 20px 16px 40px;
   }
 
   .tenant-header-subtitle {
@@ -727,8 +838,28 @@
     justify-content: center;
   }
 
-  .tenant-stats-row .ant-col {
-    margin-bottom: 0;
+  /* Stat cards: tighter padding, smaller icon/text so labels never
+     wrap letter-by-letter, and content always fits the column width */
+  .tenant-stat-card .ant-card-body {
+    padding: 14px 14px;
+  }
+
+  .tenant-stat-inner {
+    gap: 10px;
+  }
+
+  .tenant-stat-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+
+  .tenant-stat-label.ant-typography {
+    font-size: 12px;
+  }
+
+  .tenant-stat-value {
+    font-size: 18px;
   }
 
   .tenant-table-card .ant-card-body {
@@ -743,6 +874,23 @@
   .tenant-search.ant-input-affix-wrapper {
     width: 100%;
     font-size: 15px;
+  }
+
+  /* leave room so content isn't hidden behind the floating FAB */
+  .chit-mobile-list {
+    padding-bottom: 120px;
+  }
+
+  .tenant-modal .ant-modal-content {
+    padding: 20px 16px 18px;
+  }
+}
+
+/* Single stat card per row on very small phones to guarantee no wrapping */
+@media (max-width: 400px) {
+  .tenant-stats-row .ant-col {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 

@@ -1,0 +1,8 @@
+/* Move .sidebar, .sidebar-brand, .sidebar-brand-mark, .sidebar-brand-name,
+   .nav, .nav-item, .sidebar-footer, .sidebar-footer-card selectors here
+   from Home.css — they belong to this component now. */
+
+.nav-item {
+  text-decoration: none;
+  cursor: pointer;
+}

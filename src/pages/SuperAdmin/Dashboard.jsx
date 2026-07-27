@@ -21,9 +21,6 @@ const { Header, Content } = Layout;
 const { Title, Text }     = Typography;
 const { Option }          = Select;
 
-/* ─────────────────────────────────────────────
-   Plan Badge
-───────────────────────────────────────────── */
 const PlanBadge = ({ plan }) => {
   const config = {
     trial:   { cls: 'badge-trial',   icon: <HourglassOutlined />, label: 'Trial'   },

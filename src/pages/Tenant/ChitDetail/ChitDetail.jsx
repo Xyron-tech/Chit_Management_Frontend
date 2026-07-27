@@ -1,23 +1,20 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Layout, Typography, Button, Table, Tag, Space,
-  Modal, Form, Input, Card, Row, Col,
-  Popconfirm, message, Select,
-  Tooltip, Avatar, Spin, Divider, InputNumber, Breadcrumb, Checkbox, Grid
+  Typography, Button, Table, Tag, Space, Card, Row, Col,
+  Popconfirm, message, Select, Tooltip, Avatar, Spin, Divider, Checkbox, Grid
 } from 'antd';
 import {
   ArrowLeftOutlined, PlusOutlined, EditOutlined,
-  DeleteOutlined, LogoutOutlined, TeamOutlined,
-  WalletOutlined, BankOutlined, ThunderboltOutlined,
+  DeleteOutlined, TeamOutlined,
+  WalletOutlined, ThunderboltOutlined,
   OrderedListOutlined, CheckCircleFilled, ClockCircleOutlined,
-  CheckCircleOutlined
+  CheckCircleOutlined, StarFilled, UserOutlined
 } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
 import API from '../../../api/axios';
+import MemberFormModal from './Memberformmodal';
 import './ChitDetail.css';
 
-const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { useBreakpoint } = Grid;
@@ -28,14 +25,15 @@ const ChitDetail = () => {
   const [memberModal, setMemberModal] = useState(false);
   const [editMember, setEditMember] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(1);
-  const [form] = Form.useForm();
   const { id } = useParams();
-  const { logout } = useAuth();
   const navigate = useNavigate();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
+  const [saveLoading, setSaveLoading] = useState(false);
+const [deleteLoading, setDeleteLoading] = useState(false);
+const [paymentLoading, setPaymentLoading] = useState(false);
+const [markAllLoading, setMarkAllLoading] = useState(false);
 
-  // ===== Fetch Chit =====
   const fetchChit = async () => {
     try {
       setLoading(true);
@@ -50,14 +48,9 @@ const ChitDetail = () => {
 
   useEffect(() => { fetchChit(); }, [id]);
 
-  // ===== Per Member Amount Calculation (Auction chits) =====
   const getPerMemberAmount = (chit) => {
     if (!chit) return 0;
-
-    if (chit.chitType === 'tallu') {
-      return chit.installmentAmount || 0;
-    }
-
+    if (chit.chitType === 'tallu') return chit.installmentAmount || 0;
     const memberCount = chit.members?.length > 0 ? chit.members.length : 1;
     const installment = chit.installmentAmount || 0;
     const commission = chit.commission || 0;
@@ -66,100 +59,58 @@ const ChitDetail = () => {
     return totalMonthly / memberCount;
   };
 
-  // ===== Add / Edit Member (+ Amount + Prized Month for Tallu) =====
-  const handleMemberSubmit = async (values) => {
-    try {
-      const { memberName, phone, amount, isPrizedMonth } = values;
-
-      if (editMember) {
-        const wasAlreadyPrized = editMember.prizedMonth?.includes(selectedMonth) || false;
-        const prizedChanged = !!isPrizedMonth !== wasAlreadyPrized;
-
-        await API.put(`/chits/${id}/members/${editMember._id}`, {
-          memberName,
-          phone,
-          ...(prizedChanged && { month: selectedMonth, prized: !!isPrizedMonth })
-        });
-
-        if (chit.chitType === 'tallu' && amount !== undefined && amount !== null) {
-          await API.put(
-            `/chits/${id}/members/${editMember._id}/payments/month/${selectedMonth}/amount`,
-            { amount }
-          );
-        }
-
-        message.success('Member updated');
-      } else {
-        await API.post(`/chits/${id}/members`, { memberName, phone });
-        message.success('Member added');
-      }
-
-      form.resetFields();
-      setMemberModal(false);
-      setEditMember(null);
-      fetchChit();
-    } catch (err) {
-      message.error(err.response?.data?.message || 'Something went wrong. Please try again.');
-    }
-  };
-
-  // ===== Delete Member =====
   const handleDeleteMember = async (memberId) => {
     try {
+          setDeleteLoading(true);
       await API.delete(`/chits/${id}/members/${memberId}`);
       message.success('Member removed');
       fetchChit();
     } catch (err) {
       message.error('Delete failed. Please try again.');
     }
+     finally {
+    setDeleteLoading(false);
+  }
   };
 
-  // ===== Mark Payment =====
   const handleMarkPayment = async (memberId, paymentId) => {
     try {
+          setPaymentLoading(true);
       await API.put(`/chits/${id}/members/${memberId}/payments/${paymentId}`);
       fetchChit();
     } catch (err) {
       message.error('Unable to update payment. Please try again.');
+
     }
+    finally {
+    setPaymentLoading(false);
+  }
   };
 
-  // ===== Mark All Paid =====
   const handleMarkAllPaid = async () => {
     try {
+          setMarkAllLoading(true);
       await API.put(`/chits/${id}/payments/month/${selectedMonth}/mark-all-paid`);
       message.success(`Month ${selectedMonth} — all members marked paid`);
       fetchChit();
     } catch (err) {
       message.error('Unable to update payments. Please try again.');
     }
+    finally {
+    setMarkAllLoading(false);
+  }
   };
 
-  // ===== Open Edit Member Modal =====
   const openEditMember = (member) => {
     setEditMember(member);
-
-    const currentPayment = member.payments?.find(p => p.month === selectedMonth);
-
-    form.setFieldsValue({
-      memberName: member.memberName,
-      phone: member.phone,
-      amount: chit.chitType === 'tallu'
-        ? (currentPayment?.amount ?? chit.installmentAmount)
-        : undefined,
-      isPrizedMonth: member.prizedMonth?.includes(selectedMonth) || false
-    });
     setMemberModal(true);
   };
 
-  // ===== Open Add Member Modal =====
   const openAddMember = () => {
     setEditMember(null);
-    form.resetFields();
     setMemberModal(true);
   };
 
-  // ===== Month Options =====
   const monthOptions = () => {
     if (!chit) return [];
     const start = new Date(chit.startDate);
@@ -182,38 +133,57 @@ const ChitDetail = () => {
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   };
 
-const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
-  return chit?.members?.find(
-    m => Array.isArray(m.prizedMonth) && m.prizedMonth.includes(month) && m._id !== excludeMemberId
-  );
-};
+  const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
+    return chit?.members?.find(
+      m => Array.isArray(m.prizedMonth) && m.prizedMonth.includes(month) && m._id !== excludeMemberId
+    );
+  };
 
-  // ===== Unified Member + Payment Table Columns =====
+  const getPrizedAmount = (month) => {
+    if (!chit?.members) return 0;
+    return chit.members.reduce((sum, m) => {
+      const payment = m.payments?.find(p => p.month === month);
+      return sum + (payment?.amount || 0);
+    }, 0);
+  };
+
   const memberColumns = [
     {
       title: '#',
       width: 52,
-      render: (_, __, index) => (
-        <Avatar size="small" className="member-index-avatar">
-          {index + 1}
-        </Avatar>
+      render: (_, record, index) => (
+        <Avatar
+          size={60}
+          src={record.photo?.url || undefined}
+          className="member-index-avatar"
+          icon={!record.photo?.url ? <UserOutlined /> : null}
+        />
       )
     },
     {
       title: 'Member Name',
       dataIndex: 'memberName',
-      render: (name, record) => (
-        <Space direction="vertical" size={0}>
-          <Text
-            strong
-            className="member-name-text"
-            style={record.prizedMonth?.includes(selectedMonth) ? { color: '#05ce5e' } : {}}
-          >
-            {name}
-          </Text>
-          <Text type="secondary" className="member-phone-inline">{record.phone || '—'}</Text>
-        </Space>
-      )
+      render: (name, record) => {
+        const isPrized = record.prizedMonth?.includes(selectedMonth);
+        return (
+          <Space orientation="vertical" size={0}>
+            <Text
+              strong
+              className="member-name-text"
+              style={isPrized ? { color: '#ffffff' } : {}}
+            >
+              {name}
+            </Text>
+            <Text
+              type="secondary"
+              className="member-phone-inline"
+              style={isPrized ? { color: 'rgba(255,255,255,0.75)' } : {}}
+            >
+              {record.phone || '—'}
+            </Text>
+          </Space>
+        );
+      }
     },
     {
       title: 'Prized Month',
@@ -222,7 +192,7 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
       width: 140,
       render: (_, record) => {
         if (record.prizedMonth?.includes(selectedMonth)) {
-          return <Tag color="gold" bordered={false}>★ This Month</Tag>;
+          return <Tag color="gold" variant="filled">★ This Month</Tag>;
         }
         if (!record.prizedMonth || record.prizedMonth.length === 0) {
           return <Text type="secondary">—</Text>;
@@ -230,7 +200,7 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
         return (
           <Space size={4} wrap>
             {record.prizedMonth.slice().sort((a, b) => a - b).map(m => (
-              <Tag key={m} bordered={false}>M{m}</Tag>
+              <Tag key={m} variant="filled">M{m}</Tag>
             ))}
           </Space>
         );
@@ -242,15 +212,16 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
       align: 'right',
       render: (_, record) => {
         const payment = record.payments?.find(p => p.month === selectedMonth);
+        const isPrized = record.prizedMonth?.includes(selectedMonth);
         if (chit?.chitType === 'tallu') {
           const amt = payment?.amount ?? chit.installmentAmount;
-          return <Text strong className="amount-secondary">{currency(amt)}</Text>;
+          return <Text strong className="amount-secondary" style={isPrized ? { color: '#ffffff' } : {}}>{currency(amt)}</Text>;
         }
         const perMember = getPerMemberAmount(chit);
         return (
-          <Space direction="vertical" size={0} align="end">
-            <Text strong className="amount-secondary">{currency(payment?.amount ?? perMember)}</Text>
-            <Text className="amount-footnote">incl. {chit?.commission}% commission</Text>
+          <Space orientation="vertical" size={0} align="end">
+            <Text strong className="amount-secondary" style={isPrized ? { color: '#ffffff' } : {}}>{currency(payment?.amount ?? perMember)}</Text>
+            <Text className="amount-footnote" style={isPrized ? { color: 'rgba(255,255,255,0.7)' } : {}}>incl. {chit?.commission}% commission</Text>
           </Space>
         );
       }
@@ -262,11 +233,13 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
       width: 150,
       render: (_, record) => {
         const payment = record.payments?.find(p => p.month === selectedMonth);
-        if (!payment) return <Tag className="tag-no-payment" bordered={false}>No payment</Tag>;
+        if (!payment) return <Tag className="tag-no-payment" variant="filled">No payment</Tag>;
         return (
-          <Space direction="vertical" size={2} align="center">
+          <Space orientation="vertical" size={2} align="center">
             <Checkbox
               checked={payment.status === 'paid'}
+                  disabled={paymentLoading}
+
               onChange={() => handleMarkPayment(record._id, payment._id)}
               className={payment.status === 'paid' ? 'checkbox-paid' : 'checkbox-pending'}
             >
@@ -287,8 +260,8 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
       width: 96,
       render: (_, record) => (
         <Space size={4}>
-          <Tooltip title="Edit member">
-            <Button size="small" type="text"
+          <Tooltip title="Edit member" >
+            <Button size="small" shape="circle"
               icon={<EditOutlined />}
               className="row-action-btn"
               onClick={() => openEditMember(record)}
@@ -302,7 +275,9 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
               okText="Remove" cancelText="Cancel"
               okButtonProps={{ danger: true }}
             >
-              <Button size="small" danger type="text"
+              <Button size="small" danger shape="circle"
+              loading={deleteLoading}
+    disabled={deleteLoading}
                 icon={<DeleteOutlined />}
                 className="row-action-btn"
               />
@@ -313,7 +288,6 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
     }
   ];
 
-  // ===== Mobile Member Card Renderer =====
   const renderMobileMemberCard = (record, index) => {
     const payment = record.payments?.find(p => p.month === selectedMonth);
     const isPrizedThisMonth = record.prizedMonth?.includes(selectedMonth);
@@ -328,19 +302,26 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
       >
         <div className="mmc-top">
           <Space>
-            <Avatar size="small" className="member-index-avatar">{index + 1}</Avatar>
+            <Avatar
+              size={60}
+              src={record.photo?.url || undefined}
+              className="member-index-avatar"
+              icon={!record.photo?.url ? <UserOutlined /> : null}
+            />
             <div>
-              <Text strong className="member-name-text" style={isPrizedThisMonth ? { color: '#05ce5e' } : {}}>
+              <Text strong className="member-name-text" style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>
                 {record.memberName}
               </Text>
               <div>
-                <Text type="secondary" className="member-phone-inline">{record.phone || '—'}</Text>
+                <Text type="secondary" className="member-phone-inline" style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}>
+                  {record.phone || '—'}
+                </Text>
               </div>
             </div>
           </Space>
           <Space size={4}>
             <Tooltip title="Edit member">
-              <Button size="small" type="text" icon={<EditOutlined />} onClick={() => openEditMember(record)} />
+              <Button size="small" shape="circle" icon={<EditOutlined />} onClick={() => openEditMember(record)} />
             </Tooltip>
             <Popconfirm
               title="Remove this member?"
@@ -349,52 +330,52 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
               okText="Remove" cancelText="Cancel"
               okButtonProps={{ danger: true }}
             >
-              <Button size="small" danger type="text" icon={<DeleteOutlined />} />
+              <Button size="small" danger shape="circle" icon={<DeleteOutlined />} />
             </Popconfirm>
           </Space>
         </div>
 
-        <Divider className="mmc-divider" />
-
         <div className="mmc-row">
-          <Text type="secondary">Month {selectedMonth} Amount</Text>
-          <Text strong>{currency(amt)}</Text>
+          <Text type="secondary" style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}>Month {selectedMonth} Amount</Text>
+          <Text strong style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>{currency(amt)}</Text>
         </div>
 
         {isPrizedThisMonth ? (
           <div className="mmc-row">
-            <Text type="secondary">Prized Month</Text>
-            <Tag color="gold" bordered={false}>★ This Month</Tag>
+            <Text type="secondary" style={{ color: 'rgba(255,255,255,0.75)' }}>Prized Month</Text>
+            <Tag color="gold" variant="filled">★ This Month</Tag>
           </div>
         ) : record.prizedMonth?.length > 0 && (
           <div className="mmc-row">
             <Text type="secondary">Prized Month</Text>
             <Space size={4} wrap>
               {record.prizedMonth.slice().sort((a, b) => a - b).map(m => (
-                <Tag key={m} bordered={false}>M{m}</Tag>
+                <Tag key={m} variant="filled">M{m}</Tag>
               ))}
             </Space>
           </div>
         )}
 
         <div className="mmc-row">
-          <Text type="secondary">Payment Status</Text>
+          <Text type="secondary" style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}>Payment Status</Text>
           {payment ? (
             <Checkbox
               checked={payment.status === 'paid'}
               onChange={() => handleMarkPayment(record._id, payment._id)}
             >
-              {payment.status === 'paid' ? 'Paid' : 'Pending'}
+              <span style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>
+                {payment.status === 'paid' ? 'Paid' : 'Pending'}
+              </span>
             </Checkbox>
           ) : (
-            <Tag className="tag-no-payment" bordered={false}>No payment</Tag>
+            <Tag className="tag-no-payment" variant="filled">No payment</Tag>
           )}
         </div>
 
         {payment?.paidAt && (
           <div className="mmc-row">
-            <Text type="secondary">Paid On</Text>
-            <Text className="payment-date">
+            <Text type="secondary" style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}>Paid On</Text>
+            <Text className="payment-date" style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>
               {new Date(payment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
             </Text>
           </div>
@@ -403,7 +384,6 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
     );
   };
 
-  // ===== Loading =====
   if (loading) return (
     <div className="cd-loading-screen">
       <Spin size="large" />
@@ -412,7 +392,6 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
 
   if (!chit) return null;
 
-  // ===== Current Month Payments (for stats) =====
   const currentMonthPayments = chit.members?.map(member => {
     const payment = member.payments?.find(p => p.month === selectedMonth);
     return { member, payment };
@@ -425,243 +404,174 @@ const getPrizedMemberForMonth = (month, excludeMemberId = null) => {
     return payment?.status === 'paid' ? sum + (payment.amount || 0) : sum;
   }, 0);
 
+  const prizedMember = getPrizedMemberForMonth(selectedMonth);
+
   return (
-    <Layout className="cd-layout">
+    <div className="cd-content">
 
-      {/* Header */}
-      <Header className="cd-header">
-        <div className="cd-header-left">
-          <div className="cd-logo">
-            <BankOutlined />
-          </div>
-          <div className="tenant-header-titles">
-            <Text className="tenant-header-subtitle">Chit Fund Management</Text>
-          </div>
-        </div>
-        <div className="cd-header-right">
-          <Button className="cd-back-btn"
-            icon={<ArrowLeftOutlined />}
-            onClick={() => navigate('/dashboard')}
-          >
-            <span className="cd-btn-label">Back to Dashboard</span>
-          </Button>
-          <Button className="cd-logout-btn"
-            icon={<LogoutOutlined />}
-            size="middle"
-            onClick={() => { logout(); navigate('/login'); }}
-          >
-            <span className="cd-btn-label">Log out</span>
-          </Button>
-        </div>
-      </Header>
-
-      <Content className="cd-content">
-
-        {/* Chit Info Card */}
-        <Card className="cd-info-card" bordered={false}>
-          <div className="cd-info-header">
-            <div className="cd-info-title-row">
-              <Title className="cd-info-title">{chit.chitName}</Title>
-              <Tag className={`chit-type-tag ${chit.chitType}`} bordered={false}>
-                {chit.chitType === 'auction'
-                  ? <><ThunderboltOutlined /> Auction</>
-                  : <><OrderedListOutlined /> Tallu</>}
-              </Tag>
-            </div>
-          </div>
-          <Divider className="cd-info-divider" />
-          <div className="cd-info-grid">
-            {[
-              { label: 'Total Amount', value: currency(chit.chitAmount) },
-              { label: 'Installment', value: currency(chit.installmentAmount) },
-              { label: 'Commission', value: `${chit.commission}%` },
-              { label: 'Total Months', value: `${chit.totalMonths} months` },
-              { label: 'Chit Date', value: `${getOrdinal(chit.chitDate)} of every month` },
-              { label: 'Members', value: `${chit.members?.length || 0} / ${chit.memberCount}` },
-              { label: 'Start Date', value: new Date(chit.startDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) },
-              { label: 'End Date', value: new Date(chit.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) },
-            ].map((item, i) => (
-              <div className="cd-info-item" key={i}>
-                <Text className="cd-info-label">{item.label}</Text>
-                <Text className="cd-info-value">{item.value}</Text>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Members & Payments — Unified Table */}
-        <Card className="cd-members-card" bordered={false}>
-          <div className={`cd-card-header ${isMobile ? 'cd-card-header-mobile' : ''}`}>
-            <Title className="cd-card-title">
-              <TeamOutlined className="cd-card-title-icon" />
-              Members
-              <span className="cd-card-title-count">{chit?.members?.length || 0} / {chit.memberCount}</span>
-              <span className="cd-card-title-month">· {getOrdinal(selectedMonth)} Month</span>
-            </Title>
-
-            <Space wrap className="cd-header-actions">
-
-              <Button type="primary"
-                icon={<PlusOutlined />}
-                className="cd-add-btn"
-                onClick={openAddMember}
-                disabled={chit.members?.length >= chit.memberCount}
-              >
-                Add Member
-              </Button>
-            </Space>
-          </div>
-
-          {/* Payment Stats */}
-          <Row gutter={[12, 12]} className="cd-payment-stats">
-            <Col xs={24} sm={8}>
-              <div className="cd-stat-box paid">
-                <Text className="cd-stat-box-value">{paidCount}</Text>
-                <Text className="cd-stat-box-label"><CheckCircleFilled /> Paid</Text>
-              </div>
-            </Col>
-            <Col xs={24} sm={8}>
-              <div className="cd-stat-box pending">
-                <Text className="cd-stat-box-value">{pendingCount}</Text>
-                <Text className="cd-stat-box-label"><ClockCircleOutlined /> Pending</Text>
-              </div>
-            </Col>
-            <Col xs={24} sm={8}>
-              <div className="cd-stat-box collected">
-                <Text className="cd-stat-box-value">{currency(collectedAmount)}</Text>
-                <Text className="cd-stat-box-label"><WalletOutlined /> Collected</Text>
-              </div>
-            </Col>
-          </Row>
-
-          <div className="cd-month-actions-row">
-            <Select
-              className="cd-month-select"
-              value={selectedMonth}
-              onChange={setSelectedMonth}
-            >
-              {monthOptions().map(opt => (
-                <Option key={opt.value} value={opt.value}>{opt.label}</Option>
-              ))}
-            </Select>
-            <Button
-              className="mark-all-btn"
-              type="primary"
-              icon={<CheckCircleOutlined />}
-              onClick={handleMarkAllPaid}
-            >
-              {isMobile ? 'Mark All' : 'Mark All Paid'}
-            </Button>
-          </div>
-
-          {/* <Divider className="cd-payments-divider" /> */}
-
-          {isMobile ? (
-            <div className="mobile-member-list">
-              {(chit.members || []).length === 0
-                ? <Text type="secondary" className="cd-empty-text">No members yet. Add members to start collecting payments.</Text>
-                : chit.members.map((record, index) => renderMobileMemberCard(record, index))
-              }
-            </div>
-          ) : (
-            <Table
-              className="cd-table"
-              columns={memberColumns}
-              dataSource={chit.members || []}
-              rowKey="_id"
-              pagination={{ pageSize: 10 }}
-              scroll={{ x: 760 }}
-              rowClassName={(record) =>
-                record.prizedMonth?.includes(selectedMonth) ? 'prized-row' : ''
-              }
-            />
-          )}
-        </Card>
-
-      </Content>
-
-      {/* Add / Edit Member Modal */}
-      <Modal
-        title={editMember ? 'Edit Member' : 'Add Member'}
-        open={memberModal}
-        onCancel={() => { setMemberModal(false); form.resetFields(); setEditMember(null); }}
-        footer={null}
-        className="cd-modal"
-        width={isMobile ? '92%' : 460}
+      <Button
+        className="cd-back-btn"
+        icon={<ArrowLeftOutlined />}
+        onClick={() => navigate('/chit')}
+        style={{ marginBottom: 16 }}
       >
-        <Text className="cd-modal-subtitle">
-          {editMember ? 'Update this member\'s details.' : `Add a new member to ${chit.chitName}.`}
-        </Text>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleMemberSubmit}
-          className="cd-modal-form"
-        >
-          <Form.Item name="memberName" label="Member Name"
-            rules={[{ required: true, message: 'Member name is required' }]}>
-            <Input placeholder="e.g. Anandraj" />
-          </Form.Item>
+        Back
+      </Button>
 
-          <Form.Item name="phone" label="Phone Number">
-            <Input placeholder="e.g. 9876543210" />
-          </Form.Item>
+      <Card className="cd-info-card" variant="filled">
+        <div className="cd-info-header">
+          <div className="cd-info-title-row">
+            <Title className="cd-info-title">{chit?.chitName}</Title>
+            <Tag className={`chit-type-tag ${chit?.chitType}`} variant="filled">
+              {chit?.chitType === 'auction'
+                ? <><ThunderboltOutlined /> Auction</>
+                : <><OrderedListOutlined /> Tallu</>}
+            </Tag>
+          </div>
+        </div>
+        <Divider className="cd-info-divider" />
+        <div className="cd-info-grid">
+          {[
+            { label: 'Total Amount', value: currency(chit?.chitAmount) },
+            { label: 'Installment', value: currency(chit.installmentAmount) },
+            { label: 'Commission', value: `${chit.commission}%` },
+            { label: 'Total Months', value: `${chit.totalMonths} months` },
+            { label: 'Chit Date', value: `${getOrdinal(chit.chitDate)} of every month` },
+            { label: 'Members', value: `${chit.members?.length || 0} / ${chit.memberCount}` },
+            { label: 'Start Date', value: new Date(chit.startDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) },
+            { label: 'End Date', value: new Date(chit.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) },
+          ].map((item, i) => (
+            <div className="cd-info-item" key={i}>
+              <Text className="cd-info-label">{item.label}</Text>
+              <Text className="cd-info-value">{item.value}</Text>
+            </div>
+          ))}
+        </div>
+      </Card>
 
-          {editMember && chit?.chitType === 'tallu' && (
-            <>
-              <Form.Item
-                name="amount"
-                label={`Month ${selectedMonth} Amount (₹)`}
-                extra="Applies to all members and automatically recalculates future months."
-              >
-                <InputNumber
-                  style={{ width: '100%' }}
-                  min={0}
-                  formatter={v => `₹ ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={v => v.replace(/₹\s?|(,*)/g, '')}
-                />
-              </Form.Item>
+      {prizedMember && (
+        <div className="prized-spotlight">
+          <Avatar
+            size={60}
+            src={prizedMember.photo?.url || undefined}
+            className="prized-spotlight-avatar"
+          >
+            {!prizedMember.photo?.url && <UserOutlined />}
+          </Avatar>
+          <div className="prized-spotlight-info">
+            <div className="prized-spotlight-tag">
+              <StarFilled /> Prized this month
+            </div>
+            <div className="prized-spotlight-name">{prizedMember.memberName}</div>
+            <div className="prized-spotlight-meta">
+              {getOrdinal(selectedMonth)} Month{prizedMember.phone ? ` · ${prizedMember.phone}` : ''}
+            </div>
+          </div>
+          <div className="prized-spotlight-amount">
+            <div className="prized-spotlight-amount-label">Received</div>
+            <div className="prized-spotlight-amount-value">{currency(getPrizedAmount(selectedMonth))}</div>
+          </div>
+        </div>
+      )}
 
-              {(() => {
-                const takenBy = getPrizedMemberForMonth(selectedMonth, editMember._id);
+      <Card className="cd-members-card" variant="filled">
+        <div className={`cd-card-header ${isMobile ? 'cd-card-header-mobile' : ''}`}>
+          <Title className="cd-card-title">
+            <TeamOutlined className="cd-card-title-icon" />
+            Members
+            <span className="cd-card-title-count">{chit?.members?.length || 0} / {chit.memberCount}</span>
+            <span className="cd-card-title-month">· {getOrdinal(selectedMonth)} Month</span>
+          </Title>
 
-                if (takenBy) {
-                  return (
-                    <Form.Item label="Prized Month">
-                      <Text type="secondary">
-                        Month {selectedMonth} is already prized by <strong>{takenBy.memberName}</strong>.
-                      </Text>
-                    </Form.Item>
-                  );
-                }
-
-                return (
-                  <Form.Item
-                    name="isPrizedMonth"
-                    valuePropName="checked"
-                    extra={`Mark this member as prized for Month ${selectedMonth}.`}
-                  >
-                    <Checkbox>Prized Month</Checkbox>
-                  </Form.Item>
-                );
-              })()}
-            </>
-          )}
-
-          <Space className="cd-modal-footer">
-            <Button
-              onClick={() => { setMemberModal(false); form.resetFields(); setEditMember(null); }}
+          <Space wrap className="cd-header-actions">
+            <Button type="primary"
+              icon={<PlusOutlined />}
+              className="cd-add-btn"
+              onClick={openAddMember}
+              disabled={chit.members?.length >= chit.memberCount}
             >
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" className="cd-modal-submit-btn">
-              {editMember ? 'Save Changes' : 'Add Member'}
+              Add Member
             </Button>
           </Space>
-        </Form>
-      </Modal>
+        </div>
 
-    </Layout>
+        <Row gutter={[12, 12]} className="cd-payment-stats">
+          <Col xs={24} sm={8} style={{ paddingInline: '0px' }}>
+            <div className="cd-stat-box paid">
+              <Text className="cd-stat-box-value">{paidCount}</Text>
+              <Text className="cd-stat-box-label"><CheckCircleFilled /> Paid</Text>
+            </div>
+          </Col>
+          <Col xs={24} sm={8} style={{ paddingInline: '0px' }}>
+            <div className="cd-stat-box pending">
+              <Text className="cd-stat-box-value">{pendingCount}</Text>
+              <Text className="cd-stat-box-label"><ClockCircleOutlined /> Pending</Text>
+            </div>
+          </Col>
+          <Col xs={24} sm={8} style={{ paddingInline: '0px' }}>
+            <div className="cd-stat-box collected">
+              <Text className="cd-stat-box-value">{currency(collectedAmount)}</Text>
+              <Text className="cd-stat-box-label"><WalletOutlined /> Collected</Text>
+            </div>
+          </Col>
+        </Row>
+
+        <div className="cd-month-actions-row">
+          <Select
+            className="cd-month-select"
+            value={selectedMonth}
+            onChange={setSelectedMonth}
+          >
+            {monthOptions().map(opt => (
+              <Option key={opt.value} value={opt.value}>{opt.label}</Option>
+            ))}
+          </Select>
+          <Button
+            className="mark-all-btn"
+            type="primary"
+            loading={markAllLoading}
+    disabled={markAllLoading}
+            icon={<CheckCircleOutlined />}
+            onClick={handleMarkAllPaid}
+          >
+            {isMobile ? 'Mark All' : 'Mark All Paid'}
+          </Button>
+        </div>
+
+        {isMobile ? (
+          <div className="mobile-member-list">
+            {(chit.members || []).length === 0
+              ? <Text type="secondary" className="cd-empty-text">No members yet. Add members to start collecting payments.</Text>
+              : chit.members.map((record, index) => renderMobileMemberCard(record, index))
+            }
+          </div>
+        ) : (
+          <Table
+            className="cd-table"
+            columns={memberColumns}
+            dataSource={chit.members || []}
+            rowKey="_id"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 760 }}
+            rowClassName={(record) =>
+              record.prizedMonth?.includes(selectedMonth) ? 'prized-row' : ''
+            }
+          />
+        )}
+      </Card>
+
+      <MemberFormModal
+        open={memberModal}
+        onClose={() => setMemberModal(false)}
+        onSaved={fetchChit}
+        chit={chit}
+        chitId={id}
+        editMember={editMember}
+        selectedMonth={selectedMonth}
+        isMobile={isMobile}
+      />
+
+    </div>
   );
 };
 

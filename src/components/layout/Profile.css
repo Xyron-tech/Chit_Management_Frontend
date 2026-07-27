@@ -1,0 +1,408 @@
+:root {
+  --ink-900: #0f1729;
+  --ink-800: #1c2740;
+  --ink-600: #475467;
+  --ink-400: #98a2b3;
+  --ink-200: #e4e7ec;
+  --ink-100: #f0f2f5;
+  --surface: #ffffff;
+  --page-bg: #f6f7fa;
+
+  --navy: #16213e;
+  --navy-light: #24345c;
+  --gold: #b8873f;
+  --gold-light: #f4e9d8;
+  --gold-dark: #8f6a2f;
+
+  --danger: #b42318;
+  --danger-bg: #fef3f2;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.05), 0 1px 2px rgba(16, 24, 40, 0.04);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+}
+
+.pf-loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+/* ---------------- Page shell ---------------- */
+
+.profile-page {
+  width: 100%;
+}
+
+.profile-title.ant-typography {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 0 0 2px;
+  letter-spacing: -0.01em;
+}
+
+.profile-subtitle.ant-typography {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-600);
+  margin-bottom: 20px;
+}
+
+/* ---------------- Shared card ---------------- */
+
+.pf-card.ant-card {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--ink-200);
+  margin-bottom: 20px;
+  background: var(--surface);
+}
+
+.pf-card .ant-card-body {
+  padding: 24px;
+}
+
+/* ---------------- Profile card: avatar row ---------------- */
+
+.pf-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pf-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pf-avatar.ant-avatar {
+  background: var(--navy);
+  color: var(--gold-light);
+  font-size: 30px;
+  font-weight: 700;
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.pf-avatar-edit-btn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  background: var(--gold-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.pf-avatar-edit-btn:hover {
+  background: var(--navy);
+  transform: scale(1.05);
+}
+
+.pf-identity {
+  flex: 1;
+  min-width: 160px;
+}
+
+.pf-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.pf-email {
+  font-size: 13.5px;
+  color: var(--ink-600);
+  margin-top: 2px;
+}
+
+.pf-role-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  background: var(--gold-light);
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pf-identity-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.pf-divider {
+  height: 1px;
+  background: var(--ink-100);
+  margin: 22px 0;
+}
+
+/* ---------------- Edit form ---------------- */
+
+.pf-form .ant-form-item-label > label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-800);
+}
+
+.pf-form .ant-input {
+  border-radius: var(--radius-sm) !important;
+  border-color: var(--ink-200) !important;
+}
+
+.pf-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* ---------------- Certificates card ---------------- */
+
+.pf-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.pf-card-title.ant-typography {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 0;
+}
+
+.pf-card-title-icon {
+  color: var(--gold-dark);
+  font-size: 16px;
+}
+
+.cert-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cert-card {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  flex-direction: column-reverse;
+  padding: 20px;
+  width: 100%;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease;
+}
+
+.cert-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.cert-image-wrap {
+  flex-shrink: 0;
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cert-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.cert-info {
+  flex: 1;
+  padding: 16px 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cert-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-900);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: initial;
+}
+
+.cert-date {
+  font-size: 12px;
+  color: var(--ink-400);
+  margin-top: 4px;
+}
+
+.cert-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 23, 41, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.cert-card:hover .cert-delete-btn {
+  opacity: 1;
+}
+
+.cert-delete-btn:hover {
+  background: var(--danger);
+}
+
+/* ---------------- Add certificate modal ---------------- */
+
+.pf-modal-body {
+  padding-top: 4px;
+}
+
+.pf-modal-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-800);
+  margin-bottom: 6px;
+}
+
+.pf-modal-body .ant-upload-drag {
+  border-radius: var(--radius-sm);
+  border-color: var(--ink-200);
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 768px) {
+  .pf-card .ant-card-body {
+    padding: 16px;
+  }
+
+  .pf-avatar-row {
+    gap: 14px;
+  }
+
+  .pf-avatar.ant-avatar {
+    width: 68px !important;
+    height: 68px !important;
+    line-height: 68px !important;
+    font-size: 24px;
+  }
+
+  .pf-avatar-edit-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .pf-name {
+    font-size: 16px;
+  }
+
+  .pf-identity-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+
+  .pf-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .pf-form-actions .ant-btn {
+    width: 100%;
+  }
+
+  .pf-card-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pf-card-header .ant-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cert-grid {
+    gap: 12px;
+  }
+
+  .cert-image-wrap {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cert-info {
+    padding: 12px 14px;
+  }
+
+  .cert-delete-btn {
+    opacity: 1; /* no hover on touch devices */
+  }
+}
+
+@media (max-width: 480px) {
+  .pf-avatar-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-title.ant-typography {
+    font-size: 19px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pf-avatar-edit-btn,
+  .cert-card,
+  .cert-delete-btn {
+    transition: none;
+  }
+}

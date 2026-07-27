@@ -1,271 +1,298 @@
-
-* {
-  box-sizing: border-box;
-}
-
+/* ============================================================
+   Chit Dashboard — design tokens
+   ============================================================ */
 .dash {
+  --ink: #14213D;
+  --gold: #B8873B;
+  --gold-strong: #A87E12;
+  --gold-light: #E3BA45;
+  --green: #2F8F5B;
+  --amber: #C97A1E;
+  --red: #C2483D;
+  --muted: #9A9C9C;
+  --muted-2: #4A4D5E;
+  --border: #EDE7D8;
+  --surface: #FFFFFF;
+  --bg: #F7F6F2;
+
   display: flex;
   min-height: 100vh;
-  background: #f5f3ed;
-  color: #1e2233;
+  background: var(--bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
 }
 
+* { box-sizing: border-box; }
 
+/* ============================================================
+   Sidebar
+   ============================================================ */
 .sidebar {
-  width: 236px;
+  width: 240px;
   flex-shrink: 0;
-  background: linear-gradient(180deg, #161a30 0%, #1f2547 100%);
-  color: #e7e7ef;
+  background: var(--ink);
+  color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 26px 18px;
+  padding: 20px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 8px 28px;
+  padding: 6px 8px 22px;
 }
 
 .sidebar-brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #e3ba45, #a87e12);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-strong));
+  color: var(--ink);
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  color: #161a30;
   font-size: 15px;
 }
 
 .sidebar-brand-name {
   font-weight: 600;
-  font-size: 17px;
+  font-size: 15px;
+  letter-spacing: 0.2px;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-radius: 10px;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
   border: none;
-  cursor: pointer;
   background: transparent;
-  color: #b7b9cc;
-  font-weight: 600;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
   text-align: left;
-  transition: background 0.15s, color 0.15s;
-  border-left: 3px solid transparent;
-  width: 100%;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
 }
 
 .nav-item.active {
-  background: rgba(201, 162, 39, 0.16);
-  color: #e3ba45;
-  border-left: 3px solid #e3ba45;
+  background: rgba(184, 135, 59, 0.18);
+  color: var(--gold-light);
 }
 
 .sidebar-footer {
   margin-top: auto;
-  padding-top: 24px;
+  padding-top: 12px;
 }
 
 .sidebar-footer-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 14px;
-  font-size: 12.5px;
-  color: #9ea1b8;
-  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
 }
 
 .sidebar-footer-card strong {
-  color: #e7e7ef;
   display: block;
-  margin-bottom: 4px;
+  color: #fff;
+  font-size: 13px;
+  margin-bottom: 2px;
 }
 
-/* ---------------- Main ---------------- */
-
+/* ============================================================
+   Main
+   ============================================================ */
 .main {
   flex: 1;
-  padding: 26px 34px;
-  max-width: 1180px;
+  min-width: 0;
+  padding: 24px 28px 40px;
 }
 
+/* ---------- Topbar ---------- */
 .topbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 26px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
 }
 
 .topbar-title {
   font-size: 22px;
   font-weight: 700;
-  margin: 0;
+  margin: 0 0 4px;
+  color: var(--ink);
 }
 
 .topbar-subtitle {
-  margin: 4px 0 0;
-  font-size: 13.5px;
-  color: #767a8c;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
 }
 
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .search-box {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
-  border: 1px solid #e7e3d6;
-  border-radius: 10px;
-  padding: 8px 14px;
-  width: 230px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 12px;
+  min-width: 200px;
 }
 
 .search-box input {
   border: none;
   outline: none;
-  font-size: 13.5px;
+  font-size: 13px;
   width: 100%;
   background: transparent;
+  color: var(--ink);
 }
 
 .icon-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid #e7e3d6;
-  background: #fff;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative;
 }
 
 .icon-btn .dot {
   position: absolute;
   top: 7px;
-  right: 8px;
+  right: 7px;
   width: 7px;
   height: 7px;
-  border-radius: 99px;
-  background: #c2483d;
+  border-radius: 50%;
+  background: var(--red);
+  border: 1.5px solid var(--surface);
 }
 
 .avatar-menu {
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 99px;
-  background: linear-gradient(135deg, #e3ba45, #a87e12);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #E3E1DA;
+  background: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #161a30;
-  font-weight: 700;
-  font-size: 13px;
 }
 
-/* ---------------- Stat cards ---------------- */
-
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* ---------- Stat cards ---------- */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
   margin-bottom: 22px;
 }
 
 .stat-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 18px 20px;
-  border: 1px solid #ece8da;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
 }
 
 .stat-label {
-  font-size: 12.5px;
-  color: #8a8d9e;
-  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
   margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 22px;
-  font-weight: 600;
-  color: #1e2233;
-  margin-bottom: 6px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
 }
 
 .stat-trend {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
+  gap: 3px;
+  font-size: 11.5px;
+  margin-top: 6px;
   font-weight: 600;
 }
 
-.stat-trend.up {
-  color: #2f8f5b;
-}
+.stat-trend.up { color: var(--green); }
+.stat-trend.down { color: var(--red); }
 
-.stat-trend.down {
-  color: #c2483d;
-}
-
-/* ---------------- Content grid ---------------- */
-
+/* ---------- Content grid ---------- */
 .content-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 18px;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: center;
 }
 
 .panel {
-  background: #fff;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  border: 1px solid #ece8da;
-  padding: 20px 22px;
+  padding: 20px;
 }
 
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
 .panel-title {
-  font-size: 15.5px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -273,75 +300,39 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #a87e12;
-  background: #fbf3df;
+  background: var(--ink);
+  color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 7px 12px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-/* ---------------- Chit pot rows ---------------- */
+.new-chit-btn:hover { background: #1c2c4d; }
 
+/* ---------- Chit pools ---------- */
 .chit-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 14px;
 }
 
 .chit-row {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 13px 6px;
-  border-bottom: 1px solid #f1eee3;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  flex-wrap: wrap;
 }
-
-.chit-row:last-child {
-  border-bottom: none;
-}
-
-.chit-name {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.chit-meta {
-  font-size: 12.5px;
-  color: #8a8d9e;
-  margin-top: 2px;
-}
-
-.chit-info {
-  flex: 1;
-}
-
-.chit-amounts {
-  text-align: right;
-}
-
-.chit-collected {
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
-.chit-target {
-  font-size: 11.5px;
-  color: #b0b2c0;
-}
-
-.risk-dot {
-  margin-right: 6px;
-}
-
-/* ---------------- Pot ring ---------------- */
 
 .pot-ring-wrap {
   position: relative;
+  flex-shrink: 0;
 }
 
 .pot-ring-value {
@@ -350,72 +341,192 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 15px;
-  color: #1e2233;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
 }
 
-/* ---------------- Recent activity ---------------- */
-
-.activity-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.chit-info {
+  flex: 1;
+  min-width: 140px;
 }
 
-.activity-row {
+.chit-name {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 11px 4px;
-  border-bottom: 1px solid #f1eee3;
-}
-
-.activity-row:last-child {
-  border-bottom: none;
-}
-
-.activity-name {
-  font-size: 13.5px;
+  gap: 6px;
+  font-size: 14px;
   font-weight: 600;
-}
-
-.activity-meta {
-  font-size: 12px;
-  color: #9498a8;
-}
-
-.activity-amount {
-  text-align: right;
-}
-
-.activity-amount-value {
-  font-size: 13px;
-  font-weight: 600;
+  color: var(--ink);
   margin-bottom: 4px;
 }
 
-/* ---------------- Status pill ---------------- */
+.risk-dot { flex-shrink: 0; }
 
-.pill {
+.chit-meta {
   font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
+  color: var(--muted);
+}
+
+.chit-amounts {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.chit-collected {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.chit-target {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ---------- Status pill (used elsewhere in the app) ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
   border-radius: 999px;
-  letter-spacing: 0.2px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
-.pill-paid {
-  background: #e7f3ec;
-  color: #2f8f5b;
+.pill-paid { background: rgba(47, 143, 91, 0.12); color: var(--green); }
+.pill-pending { background: rgba(201, 122, 30, 0.12); color: var(--amber); }
+.pill-overdue { background: rgba(194, 72, 61, 0.12); color: var(--red); }
+
+/* ---------- Empty states ---------- */
+.dash-empty {
+  text-align: center;
+  padding: 24px 10px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
-.pill-pending {
-  background: #fbf0df;
-  color: #c97a1e;
+/* ---------- Loading / error screen ---------- */
+.dash-loading {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  background: var(--bg);
 }
 
-.pill-overdue {
-  background: #fae8e6;
-  color: #c2483d;
+.dash-loading-spinner {
+  animation: dash-spin 0.9s linear infinite;
+  color: var(--gold);
+}
+
+@keyframes dash-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Responsive breakpoints
+   ============================================================ */
+
+/* Tablet — stack the two content panels */
+@media (max-width: 960px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small tablet — tighter spacing, smaller sidebar */
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 18px 90px; /* extra bottom padding for the mobile bottom nav */
+  }
+
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px;
+    z-index: 40;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .sidebar-brand,
+  .sidebar-footer {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    gap: 2px;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    gap: 3px;
+    font-size: 10px;
+    padding: 6px 4px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .topbar-title { font-size: 19px; }
+  .search-box { min-width: 0; flex: 1; }
+}
+
+/* Phone */
+@media (max-width: 520px) {
+  .main { padding: 16px 14px 90px; }
+
+  .topbar {
+    align-items: stretch;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-value { font-size: 18px; }
+
+  .panel { padding: 16px; }
+
+  .chit-row {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .chit-amounts {
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .new-chit-btn {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
 }
