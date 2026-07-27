@@ -140,8 +140,8 @@ const ProfilePage = () => {
       <Card className="pf-card" bordered={false}>
         <div className="pf-avatar-row">
           <div className="pf-avatar-wrap">
-            <Avatar size={84} src={profile.profilePicture?.url} className="pf-avatar">
-              {!profile.profilePicture?.url && profile.name?.[0]?.toUpperCase()}
+            <Avatar size={84} src={profile?.profilePicture?.url} className="pf-avatar">
+              {!profile?.profilePicture?.url && profile?.name?.[0]?.toUpperCase()}
             </Avatar>
             <Upload
               showUploadList={false}
