@@ -812,12 +812,10 @@
 }
 
 .mmc-top {
-  display: flex;
+   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 10px;
-  margin-bottom: 10px;
+  gap: 12px;
 }
 
 
@@ -826,21 +824,31 @@
   margin-left: auto;
 }
 
+.member-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .member-name-text {
   display: block;
-  max-width: 100%;
-  white-space: nowrap;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .member-phone-inline {
   display: block;
-  max-width: 100%;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 
 .mmc-divider.ant-divider {
   margin: 10px 0 8px;

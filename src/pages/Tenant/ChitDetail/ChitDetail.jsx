@@ -286,21 +286,33 @@ const ChitDetail = () => {
         className={`mobile-member-card ${isPrizedThisMonth ? 'prized' : ''}`}
       >
         <div className="mmc-top">
-          <Space>
-            <Avatar size={60} src={record.photo?.url || undefined} className="member-index-avatar">
-              {!record.photo?.url && (index + 1)}
-            </Avatar>
-            <div>
-              <Text strong className="member-name-text" style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>
-                {record.memberName}
-              </Text>
-              <div>
-                <Text type="secondary" className="member-phone-inline" style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}>
-                  {record.phone || '—'}
-                </Text>
-              </div>
-            </div>
-          </Space>
+         <Space className="member-left">
+  <Avatar
+    size={60}
+    src={record.photo?.url || undefined}
+    className="member-index-avatar"
+  >
+    {!record.photo?.url && (index + 1)}
+  </Avatar>
+
+  <div className="member-info">
+    <Text
+      strong
+      className="member-name-text"
+      style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}
+    >
+      {record.memberName}
+    </Text>
+
+    <Text
+      type="secondary"
+      className="member-phone-inline"
+      style={{ color: isPrizedThisMonth ? 'rgba(255,255,255,0.75)' : undefined }}
+    >
+      {record.phone || '—'}
+    </Text>
+  </div>
+</Space>
           <Space size={4}>
             <Tooltip title="View member details">
               <Button size="small" shape="circle" icon={<EyeOutlined />} onClick={() => setViewMember(record)} />
