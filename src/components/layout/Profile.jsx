@@ -11,6 +11,14 @@ import './Profile.css';
 
 const { Title, Text } = Typography;
 
+const getInitials = (name) => {
+  if (!name) return '?';
+  const parts = name.trim().split(' ');
+  return parts.length > 1
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : parts[0].slice(0, 2).toUpperCase();
+};
+
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +36,10 @@ const ProfilePage = () => {
       setLoading(true);
       const { data } = await API.get('/auth/me');
       setProfile(data);
-      form.setFieldsValue({ name: data.name, email: data.email });
+      // NOTE: no form.setFieldsValue here — the Form only mounts once
+      // `editing` is true, so we feed it via `initialValues` instead
+      // (see the <Form> below). Calling setFieldsValue before the Form
+      // mounts is what caused the "not connected to any Form element" warning.
     } catch (err) {
       message.error(err.response?.data?.message || 'Unable to load profile. Please try again.');
     } finally {
@@ -191,6 +202,7 @@ const ProfilePage = () => {
               layout="vertical"
               onFinish={handleSaveProfile}
               className="pf-form"
+              initialValues={{ name: profile.name, email: profile.email }}
             >
               <Row gutter={16}>
                 <Col xs={24} sm={12}>
