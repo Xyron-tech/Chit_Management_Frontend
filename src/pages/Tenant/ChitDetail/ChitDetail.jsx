@@ -12,8 +12,8 @@ import {
 } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../../../api/axios';
-import MemberFormModal from './MemberFormModal';
-import MemberViewModal from './MemberViewModal';
+import MemberFormModal from './Memberformmodal';
+import MemberViewModal from './Memberviewmodal';
 import './ChitDetail.css';
 
 const { Title, Text } = Typography;
