@@ -588,53 +588,117 @@
   border-color: var(--navy-light) !important;
 }
 
-/* ============================================
-   Mobile Member Card List (replaces table < md)
-============================================ */
+/* ---------------- WhatsApp reminder button (Edit Member modal) ---------------- */
 
-.mobile-member-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.whatsapp-reminder-btn.ant-btn {
+  color: #1a9c4a;
+  border-color: #bfe8cd;
+  background: #eefbf2;
+  font-weight: 600;
 }
 
-.mobile-member-card {
-  border: 1px solid var(--ink-200);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  background: #ffffff;
-  box-shadow: var(--shadow-sm);
+.whatsapp-reminder-btn.ant-btn:hover {
+  color: #128c39 !important;
+  border-color: #128c39 !important;
+  background: #e0f7e8 !important;
 }
 
-.mobile-member-card.prized {
-  background: #3d7c48;
-  border-color: #34693e;
-}
+/* ---------------- Member View Modal ---------------- */
 
-.mmc-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.mmc-divider.ant-divider {
-  margin: 10px 0 8px;
-  border-color: var(--ink-100);
-}
-
-.mmc-row {
+.mv-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 0;
-  font-size: 13px;
-  color: var(--ink-800);
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.ant-col-xs-24 {
-  flex: 0% !important;
+.mv-avatar.ant-avatar {
+  background: var(--navy);
+  color: var(--gold-light);
+  font-size: 24px;
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.mv-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mv-name.ant-typography {
+  margin: 0 !important;
+  color: var(--ink-900);
+}
+
+.mv-phone.ant-typography {
+  font-size: 13px;
+}
+
+.mv-prized-tags {
+  margin-top: 6px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.mv-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.mv-summary-item {
+  background: var(--page-bg);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.mv-summary-label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-600);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.mv-summary-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.mv-summary-paid {
+  color: var(--success);
+}
+
+.mv-summary-pending {
+  color: var(--warning);
+}
+
+.mv-row-paid td {
+  background-color: var(--success-bg) !important;
+}
+
+/* antd sets table-layout: fixed internally whenever scroll.x is used —
+   override it so columns size to their content/width instead of being squeezed evenly. */
+.cd-modal .ant-table {
+  table-layout: auto !important;
+}
+
+.cd-modal .ant-table-container table {
+  table-layout: auto !important;
+}
+
+@media (max-width: 480px) {
+  .mv-summary {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------------- Prized Member Spotlight ---------------- */
@@ -710,19 +774,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.whatsapp-reminder-btn.ant-btn {
-  color: #1a9c4a;
-  border-color: #bfe8cd;
-  background: #eefbf2;
-  font-weight: 600;
-}
- 
-.whatsapp-reminder-btn.ant-btn:hover {
-  color: #128c39 !important;
-  border-color: #128c39 !important;
-  background: #e0f7e8 !important;
-}
-
 @media (max-width: 480px) {
   .prized-spotlight {
     flex-wrap: wrap;
@@ -735,6 +786,78 @@
     padding-top: 8px;
     border-top: 1px dashed #e8d4ac;
   }
+}
+
+/* ============================================
+   Mobile Member Card List (replaces table < md)
+============================================ */
+
+.mobile-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-member-card {
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-member-card.prized {
+  background: #3d7c48;
+  border-color: #34693e;
+}
+
+.mmc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-bottom: 10px;
+}
+
+
+.mmc-top > .ant-space:last-child {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.member-name-text {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-phone-inline {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mmc-divider.ant-divider {
+  margin: 10px 0 8px;
+  border-color: var(--ink-100);
+}
+
+.mmc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--ink-800);
+}
+
+.ant-col-xs-24 {
+  flex: 0% !important;
 }
 
 /* ---------------- Responsive ---------------- */
@@ -876,6 +999,9 @@
   .cd-payment-stats {
     flex-direction: column;
     align-items: unset;
+  }
+  .mmc-top{
+    flex-direction: column;
   }
 }
 

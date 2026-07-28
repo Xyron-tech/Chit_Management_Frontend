@@ -125,9 +125,8 @@ const AnalyticsPage = () => {
                 value={selectedYear}
                 onChange={setSelectedYear}
                 disabled={loading}
-                style={{ minWidth: 110 }}
               >
-                {YEARS.map((y) => (
+                {YEARS?.map((y) => (
                   <Option key={y} value={y}>{y}</Option>
                 ))}
               </Select>

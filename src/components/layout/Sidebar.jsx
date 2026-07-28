@@ -18,6 +18,7 @@ const menuItems = [
   { label: "Dashboard", icon: LayoutGrid, path: "/dashboard" },
   { label: "Chit", icon: Wallet, path: "/chit" },
   { label: "Analytics", icon: BarChart3, path: "/analytics" },
+  { label: "Profile Info", icon: UserCircle2, path: "/profile" },
 ];
 
 // Kept separate so it always renders at the bottom, above the branch card.

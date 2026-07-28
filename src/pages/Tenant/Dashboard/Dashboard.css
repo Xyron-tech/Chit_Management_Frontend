@@ -776,8 +776,11 @@
   font-size: 14px;
   visibility: visible;
   opacity: 1;
+  margin-bottom: 20px;
 }
-
+.chit-mobile-card-top > .ant-space:last-child{
+margin-left: auto;
+}
 .tenant-fab-btn.ant-btn:active {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(22, 33, 62, 0.34);
@@ -878,7 +881,7 @@
 
   /* leave room so content isn't hidden behind the floating FAB */
   .chit-mobile-list {
-    padding-bottom: 120px;
+    padding-bottom: 35px;
   }
 
   .tenant-modal .ant-modal-content {
@@ -891,6 +894,9 @@
   .tenant-stats-row .ant-col {
     flex: 0 0 100%;
     max-width: 100%;
+  }
+  .chit-mobile-card-top{
+    flex-direction: column;
   }
 }
 

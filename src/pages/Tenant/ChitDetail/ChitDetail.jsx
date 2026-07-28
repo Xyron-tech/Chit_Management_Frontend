@@ -8,11 +8,12 @@ import {
   DeleteOutlined, TeamOutlined,
   WalletOutlined, ThunderboltOutlined,
   OrderedListOutlined, CheckCircleFilled, ClockCircleOutlined,
-  CheckCircleOutlined, StarFilled, UserOutlined
+  CheckCircleOutlined, StarFilled, UserOutlined, EyeOutlined
 } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../../../api/axios';
-import MemberFormModal from './Memberformmodal';
+import MemberFormModal from './MemberFormModal';
+import MemberViewModal from './MemberViewModal';
 import './ChitDetail.css';
 
 const { Title, Text } = Typography;
@@ -24,15 +25,12 @@ const ChitDetail = () => {
   const [loading, setLoading] = useState(true);
   const [memberModal, setMemberModal] = useState(false);
   const [editMember, setEditMember] = useState(null);
+  const [viewMember, setViewMember] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(1);
   const { id } = useParams();
   const navigate = useNavigate();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
-  const [saveLoading, setSaveLoading] = useState(false);
-const [deleteLoading, setDeleteLoading] = useState(false);
-const [paymentLoading, setPaymentLoading] = useState(false);
-const [markAllLoading, setMarkAllLoading] = useState(false);
 
   const fetchChit = async () => {
     try {
@@ -61,44 +59,31 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
 
   const handleDeleteMember = async (memberId) => {
     try {
-          setDeleteLoading(true);
       await API.delete(`/chits/${id}/members/${memberId}`);
       message.success('Member removed');
       fetchChit();
     } catch (err) {
       message.error('Delete failed. Please try again.');
     }
-     finally {
-    setDeleteLoading(false);
-  }
   };
 
   const handleMarkPayment = async (memberId, paymentId) => {
     try {
-          setPaymentLoading(true);
       await API.put(`/chits/${id}/members/${memberId}/payments/${paymentId}`);
       fetchChit();
     } catch (err) {
       message.error('Unable to update payment. Please try again.');
-
     }
-    finally {
-    setPaymentLoading(false);
-  }
   };
 
   const handleMarkAllPaid = async () => {
     try {
-          setMarkAllLoading(true);
       await API.put(`/chits/${id}/payments/month/${selectedMonth}/mark-all-paid`);
       message.success(`Month ${selectedMonth} — all members marked paid`);
       fetchChit();
     } catch (err) {
       message.error('Unable to update payments. Please try again.');
     }
-    finally {
-    setMarkAllLoading(false);
-  }
   };
 
   const openEditMember = (member) => {
@@ -152,12 +137,9 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
       title: '#',
       width: 52,
       render: (_, record, index) => (
-        <Avatar
-          size={60}
-          src={record.photo?.url || undefined}
-          className="member-index-avatar"
-          icon={!record.photo?.url ? <UserOutlined /> : null}
-        />
+        <Avatar size={60} src={record.photo?.url || undefined} className="member-index-avatar">
+          {!record.photo?.url && (index + 1)}
+        </Avatar>
       )
     },
     {
@@ -238,8 +220,6 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
           <Space orientation="vertical" size={2} align="center">
             <Checkbox
               checked={payment.status === 'paid'}
-                  disabled={paymentLoading}
-
               onChange={() => handleMarkPayment(record._id, payment._id)}
               className={payment.status === 'paid' ? 'checkbox-paid' : 'checkbox-pending'}
             >
@@ -257,11 +237,18 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
     {
       title: '',
       key: 'actions',
-      width: 96,
+      width: 130,
       render: (_, record) => (
         <Space size={4}>
-          <Tooltip title="Edit member" >
-            <Button size="small" shape="circle"
+          <Tooltip title="View member details">
+            <Button size="small" type="text"
+              icon={<EyeOutlined />}
+              className="row-action-btn"
+              onClick={() => setViewMember(record)}
+            />
+          </Tooltip>
+          <Tooltip title="Edit member">
+            <Button size="small" type="text"
               icon={<EditOutlined />}
               className="row-action-btn"
               onClick={() => openEditMember(record)}
@@ -275,9 +262,7 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
               okText="Remove" cancelText="Cancel"
               okButtonProps={{ danger: true }}
             >
-              <Button size="small" danger shape="circle"
-              loading={deleteLoading}
-    disabled={deleteLoading}
+              <Button size="small" danger type="text"
                 icon={<DeleteOutlined />}
                 className="row-action-btn"
               />
@@ -302,12 +287,9 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
       >
         <div className="mmc-top">
           <Space>
-            <Avatar
-              size={60}
-              src={record.photo?.url || undefined}
-              className="member-index-avatar"
-              icon={!record.photo?.url ? <UserOutlined /> : null}
-            />
+            <Avatar size={60} src={record.photo?.url || undefined} className="member-index-avatar">
+              {!record.photo?.url && (index + 1)}
+            </Avatar>
             <div>
               <Text strong className="member-name-text" style={{ color: isPrizedThisMonth ? '#ffffff' : undefined }}>
                 {record.memberName}
@@ -320,6 +302,9 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
             </div>
           </Space>
           <Space size={4}>
+            <Tooltip title="View member details">
+              <Button size="small" shape="circle" icon={<EyeOutlined />} onClick={() => setViewMember(record)} />
+            </Tooltip>
             <Tooltip title="Edit member">
               <Button size="small" shape="circle" icon={<EditOutlined />} onClick={() => openEditMember(record)} />
             </Tooltip>
@@ -529,8 +514,6 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
           <Button
             className="mark-all-btn"
             type="primary"
-            loading={markAllLoading}
-    disabled={markAllLoading}
             icon={<CheckCircleOutlined />}
             onClick={handleMarkAllPaid}
           >
@@ -568,6 +551,14 @@ const [markAllLoading, setMarkAllLoading] = useState(false);
         chitId={id}
         editMember={editMember}
         selectedMonth={selectedMonth}
+        isMobile={isMobile}
+      />
+
+      <MemberViewModal
+        open={!!viewMember}
+        onClose={() => setViewMember(null)}
+        member={viewMember}
+        chit={chit}
         isMobile={isMobile}
       />
 
