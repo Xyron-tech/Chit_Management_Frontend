@@ -46,13 +46,13 @@ export default function Sidebar({ branchName = "Chennai branch", activeChits = 0
       </nav>
 
       <div className="sidebar-footer">
-        <NavLink
+        {/* <NavLink
           to={profileItem.path}
           className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
         >
           <profileItem.icon size={18} />
           {profileItem.label}
-        </NavLink>
+        </NavLink> */}
 
             {/* <div className="sidebar-footer-card">
             <strong>{branchName}</strong>
