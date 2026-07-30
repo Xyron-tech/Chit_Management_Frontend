@@ -287,11 +287,11 @@
   border-color: rgba(255, 255, 255, 0.6) !important;
 }
 
-.prized-row .checkbox-paid .ant-checkbox + span {
+.prized-row .checkbox-paid .ant-checkbox+span {
   color: #ffffff !important;
 }
 
-.prized-row .checkbox-pending .ant-checkbox + span {
+.prized-row .checkbox-pending .ant-checkbox+span {
   color: rgba(255, 255, 255, 0.85) !important;
 }
 
@@ -505,7 +505,7 @@
   font-size: 13px;
   margin-top: 4px;
   margin-bottom: 20px;
-  }
+}
 
 /* ---------------- Member photo upload (Add/Edit Member modal) ---------------- */
 
@@ -707,7 +707,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #d0dbe27d;
+  background: #3d7c48;
   border-radius: var(--radius-lg);
   padding: 16px 20px;
   margin-bottom: 20px;
@@ -737,19 +737,19 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--gold-dark);
+  color: #ffffff;
   margin-bottom: 2px;
 }
 
 .prized-spotlight-name {
   font-size: 16px;
   font-weight: 700;
-  color: var(--ink-900);
+  color: #ffffff;
 }
 
 .prized-spotlight-meta {
   font-size: 12.5px;
-  color: var(--ink-600);
+  color: #ffffff;
   margin-top: 2px;
 }
 
@@ -763,14 +763,14 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--ink-400);
+  color: #ffffff;
   margin-bottom: 3px;
 }
 
 .prized-spotlight-amount-value {
   font-size: 18px;
   font-weight: 700;
-  color: var(--gold-dark);
+  color: #ffffff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -778,13 +778,12 @@
   .prized-spotlight {
     flex-wrap: wrap;
     padding: 14px 16px;
+    flex-direction: column;
   }
 
   .prized-spotlight-amount {
     width: 100%;
-    text-align: left;
     padding-top: 8px;
-    border-top: 1px dashed #e8d4ac;
   }
 }
 
@@ -812,14 +811,14 @@
 }
 
 .mmc-top {
-   display: flex;
+  display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
 }
 
 
-.mmc-top > .ant-space:last-child {
+.mmc-top>.ant-space:last-child {
   flex: 0 0 auto;
   margin-left: auto;
 }
@@ -1008,13 +1007,22 @@
     flex-direction: column;
     align-items: unset;
   }
-  .mmc-top{
+
+  .mmc-top {
     flex-direction: column;
+  }
+
+  .prized-spotlight-avatar.ant-avatar {
+    height: auto !important;
+    width: 50% !important;
+    display: flex;
+    margin: auto;
   }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
   .row-action-btn.ant-btn,
   .cd-back-btn.ant-btn {
     transition: none;
@@ -1029,7 +1037,7 @@
     align-items: stretch;
   }
 
-  .cd-modal-footer > .ant-btn {
+  .cd-modal-footer>.ant-btn {
     width: 100%;
     height: 42px;
   }

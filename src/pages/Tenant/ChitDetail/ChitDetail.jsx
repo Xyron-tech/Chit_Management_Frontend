@@ -446,30 +446,7 @@ const ChitDetail = () => {
         </div>
       </Card>
 
-      {prizedMember && (
-        <div className="prized-spotlight">
-          <Avatar
-            size={60}
-            src={prizedMember.photo?.url || undefined}
-            className="prized-spotlight-avatar"
-          >
-            {!prizedMember.photo?.url && <UserOutlined />}
-          </Avatar>
-          <div className="prized-spotlight-info">
-            <div className="prized-spotlight-tag">
-              <StarFilled /> Prized this month
-            </div>
-            <div className="prized-spotlight-name">{prizedMember.memberName}</div>
-            <div className="prized-spotlight-meta">
-              {getOrdinal(selectedMonth)} Month{prizedMember.phone ? ` · ${prizedMember.phone}` : ''}
-            </div>
-          </div>
-          <div className="prized-spotlight-amount">
-            <div className="prized-spotlight-amount-label">Received</div>
-            <div className="prized-spotlight-amount-value">{currency(getPrizedAmount(selectedMonth))}</div>
-          </div>
-        </div>
-      )}
+      
 
       <Card className="cd-members-card" variant="filled">
         <div className={`cd-card-header ${isMobile ? 'cd-card-header-mobile' : ''}`}>
@@ -512,7 +489,30 @@ const ChitDetail = () => {
             </div>
           </Col>
         </Row>
-
+{prizedMember && (
+        <div className="prized-spotlight">
+          <Avatar
+            size={60}
+            src={prizedMember.photo?.url || undefined}
+            className="prized-spotlight-avatar"
+          >
+            {!prizedMember.photo?.url && <UserOutlined />}
+          </Avatar>
+          <div className="prized-spotlight-info">
+            <div className="prized-spotlight-tag">
+              <StarFilled /> Prized this month
+            </div>
+            <div className="prized-spotlight-name">{prizedMember.memberName}</div>
+            <div className="prized-spotlight-meta">
+              {getOrdinal(selectedMonth)} Month{prizedMember.phone ? ` · ${prizedMember.phone}` : ''}
+            </div>
+          </div>
+          <div className="prized-spotlight-amount">
+            <div className="prized-spotlight-amount-label">Received</div>
+            <div className="prized-spotlight-amount-value">{currency(getPrizedAmount(selectedMonth))}</div>
+          </div>
+        </div>
+      )}
         <div className="cd-month-actions-row">
           <Select
             className="cd-month-select"
