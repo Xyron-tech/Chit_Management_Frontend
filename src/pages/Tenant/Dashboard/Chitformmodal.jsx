@@ -267,7 +267,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                             />
                         </Form.Item>
                         {chitAmountWords && (
-                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic',fontSize:'14px',color:'blue' }}>
                                 {chitAmountWords}
                             </Text>
                         )}
@@ -287,7 +287,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                             />
                         </Form.Item>
                         {installmentAmountWords && (
-                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' ,fontSize:'14px',color:'blue' }}>
                                 {installmentAmountWords}
                             </Text>
                         )}

@@ -307,12 +307,6 @@ const MemberFormModal = ({
                                 precision={2}
                                 step={0.01}
                                 controls={false}
-                                // KEY FIX: while the user is actively typing, antd passes back
-                                // { userTyping, input } — we must return their raw input as-is,
-                                // otherwise every keystroke gets re-formatted (forcing ".00" back
-                                // in and jumping the cursor), which is what made delete/backspace
-                                // feel broken. We only apply the pretty ₹/comma/".00" formatting
-                                // once the user has stopped typing (e.g. on blur).
                                 formatter={(value, info) => {
                                     if (info?.userTyping) return info.input;
                                     if (value === "" || value === undefined || value === null) return "";
@@ -328,7 +322,7 @@ const MemberFormModal = ({
                             />
                         </Form.Item>
                         {amountWords && (
-                            <Text type="secondary" className="cd-amount-words" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
+                            <Text type="secondary" className="cd-amount-words" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' ,fontSize:'14px',color:'blue' }}>
                                 {amountWords}
                             </Text>
                         )}
