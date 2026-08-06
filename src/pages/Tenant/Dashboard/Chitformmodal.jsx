@@ -14,6 +14,66 @@ import dayjs from 'dayjs';
 const { Text } = Typography;
 const { Option } = Select;
 
+// ===== Number to words (Indian numbering system: Lakh, Crore) =====
+const ONES = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+    'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+const TENS = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+const twoDigitsToWords = (num) => {
+    if (num < 20) return ONES[num];
+    const tens = Math.floor(num / 10);
+    const ones = num % 10;
+    return `${TENS[tens]}${ones ? ' ' + ONES[ones] : ''}`;
+};
+
+const threeDigitsToWords = (num) => {
+    const hundred = Math.floor(num / 100);
+    const rest = num % 100;
+    let str = hundred ? `${ONES[hundred]} Hundred` : '';
+    if (rest) str += `${str ? ' ' : ''}${twoDigitsToWords(rest)}`;
+    return str;
+};
+
+// Converts a number into Indian-style words, e.g.
+// 524999 -> "Five Lakh Twenty Four Thousand Nine Hundred Ninety Nine"
+// 24950000000 -> "Two Thousand Four Hundred Ninety Five Crore"
+const numberToIndianWords = (num) => {
+    if (num === null || num === undefined || num === '' || isNaN(num)) return '';
+    let n = Math.floor(Math.abs(Number(num)));
+    if (n === 0) return 'Zero';
+
+    const crore = Math.floor(n / 10000000); n %= 10000000;
+    const lakh = Math.floor(n / 100000); n %= 100000;
+    const thousand = Math.floor(n / 1000); n %= 1000;
+    const hundred = n;
+
+    const parts = [];
+    if (crore) parts.push(`${crore > 99 ? numberToIndianWords(crore) : threeDigitsToWords(crore)} Crore`);
+    if (lakh) parts.push(`${twoDigitsToWords(lakh) || threeDigitsToWords(lakh)} Lakh`);
+    if (thousand) parts.push(`${twoDigitsToWords(thousand) || threeDigitsToWords(thousand)} Thousand`);
+    if (hundred) parts.push(threeDigitsToWords(hundred));
+
+    return parts.join(' ');
+};
+
+const amountToWords = (value) => {
+    const words = numberToIndianWords(value);
+    return words ? `${words} Rupees only` : '';
+};
+
+// Shared formatter/parser for all ₹ amount InputNumbers in this form.
+// KEY FIX: while the user is actively typing, antd passes back
+// { userTyping, input } — we must return their raw input as-is,
+// otherwise every keystroke gets re-formatted (forcing symbols/commas
+// back in and jumping the cursor), which breaks typing/backspacing.
+// We only apply the pretty ₹/comma formatting once typing has settled.
+const rupeeFormatter = (value, info) => {
+    if (info?.userTyping) return info.input;
+    if (value === "" || value === undefined || value === null) return "";
+    return `₹ ${Number(value).toLocaleString("en-IN")}`;
+};
+const rupeeParser = (value) => (value ? value.replace(/[₹,\s]/g, "") : "");
+
 /**
  * Add / Edit Chit modal.
  *
@@ -32,6 +92,8 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
     const [form] = Form.useForm();
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [chitAmountWords, setChitAmountWords] = useState('');
+    const [installmentAmountWords, setInstallmentAmountWords] = useState('');
 
     // Populate or reset the form whenever the modal opens
     useEffect(() => {
@@ -43,9 +105,13 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                 endDate: dayjs(editChit.endDate),
             });
             setImagePreview(editChit?.image?.url || editChit?.imageUrl || null);
+            setChitAmountWords(amountToWords(editChit?.chitAmount));
+            setInstallmentAmountWords(amountToWords(editChit?.installmentAmount));
         } else {
             form.resetFields();
             setImagePreview(null);
+            setChitAmountWords('');
+            setInstallmentAmountWords('');
         }
         setImageFile(null);
     }, [open, editChit, form]);
@@ -156,11 +222,18 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                                 placeholder="500000"
                                 min={1}
                                 style={{ width: '100%' }}
-                                formatter={v => `₹ ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={v => v.replace(/₹\s?|(,*)/g, '')}
+                                controls={false}
+                                formatter={rupeeFormatter}
+                                parser={rupeeParser}
                                 disabled={isEditing}
+                                onChange={(value) => setChitAmountWords(amountToWords(value))}
                             />
                         </Form.Item>
+                        {chitAmountWords && (
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic',fontSize:'14px',color:'blue' }}>
+                                {chitAmountWords}
+                            </Text>
+                        )}
                     </Col>
                     <Col xs={24} sm={12}>
                         <Form.Item name="installmentAmount" label="Installment (₹)"
@@ -169,11 +242,18 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                                 placeholder="25000"
                                 min={1}
                                 style={{ width: '100%' }}
-                                formatter={v => `₹ ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={v => v.replace(/₹\s?|(,*)/g, '')}
+                                controls={false}
+                                formatter={rupeeFormatter}
+                                parser={rupeeParser}
                                 disabled={isEditing}
+                                onChange={(value) => setInstallmentAmountWords(amountToWords(value))}
                             />
                         </Form.Item>
+                        {installmentAmountWords && (
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' ,fontSize:'14px',color:'blue' }}>
+                                {installmentAmountWords}
+                            </Text>
+                        )}
                     </Col>
                 </Row>
 

@@ -8,6 +8,53 @@ import API from '../../../api/axios';
 
 const { Text } = Typography;
 
+// ===== Number to words (Indian numbering system: Lakh, Crore) =====
+const ONES = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+    'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+const TENS = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+const twoDigitsToWords = (num) => {
+    if (num < 20) return ONES[num];
+    const tens = Math.floor(num / 10);
+    const ones = num % 10;
+    return `${TENS[tens]}${ones ? ' ' + ONES[ones] : ''}`;
+};
+
+const threeDigitsToWords = (num) => {
+    const hundred = Math.floor(num / 100);
+    const rest = num % 100;
+    let str = hundred ? `${ONES[hundred]} Hundred` : '';
+    if (rest) str += `${str ? ' ' : ''}${twoDigitsToWords(rest)}`;
+    return str;
+};
+
+// Converts a number into Indian-style words, e.g.
+// 524999 -> "Five Lakh Twenty Four Thousand Nine Hundred Ninety Nine"
+// 24950000000 -> "Two Thousand Four Hundred Ninety Five Crore"
+const numberToIndianWords = (num) => {
+    if (num === null || num === undefined || num === '' || isNaN(num)) return '';
+    let n = Math.floor(Math.abs(Number(num)));
+    if (n === 0) return 'Zero';
+
+    const crore = Math.floor(n / 10000000); n %= 10000000;
+    const lakh = Math.floor(n / 100000); n %= 100000;
+    const thousand = Math.floor(n / 1000); n %= 1000;
+    const hundred = n;
+
+    const parts = [];
+    if (crore) parts.push(`${crore > 99 ? numberToIndianWords(crore) : threeDigitsToWords(crore)} Crore`);
+    if (lakh) parts.push(`${twoDigitsToWords(lakh) || threeDigitsToWords(lakh)} Lakh`);
+    if (thousand) parts.push(`${twoDigitsToWords(thousand) || threeDigitsToWords(thousand)} Thousand`);
+    if (hundred) parts.push(threeDigitsToWords(hundred));
+
+    return parts.join(' ');
+};
+
+const amountToWords = (value) => {
+    const words = numberToIndianWords(value);
+    return words ? `${words} Rupees only` : '';
+};
+
 // Same helper used in ChitDetail — kept local here so this component
 // doesn't need the parent's full helper set, just the chit + month.
 const getPrizedMemberForMonth = (chit, month, excludeMemberId = null) => {
@@ -31,6 +78,7 @@ const MemberFormModal = ({
     const [photoPreview, setPhotoPreview] = useState(null);
     const [removePhotoFlag, setRemovePhotoFlag] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [amountWords, setAmountWords] = useState('');
 
     // Reset the form whenever the modal opens for a different member (or a fresh Add)
     useEffect(() => {
@@ -42,16 +90,19 @@ const MemberFormModal = ({
         if (editMember) {
             setPhotoPreview(editMember.photo?.url || null);
             const currentPayment = editMember.payments?.find(p => p.month === selectedMonth);
+            const initialAmount = chit?.chitType === 'tallu'
+                ? (currentPayment?.amount ?? chit.installmentAmount)
+                : undefined;
             form.setFieldsValue({
                 memberName: editMember.memberName,
                 phone: editMember.phone,
-                amount: chit?.chitType === 'tallu'
-                    ? (currentPayment?.amount ?? chit.installmentAmount)
-                    : undefined,
+                amount: initialAmount,
                 isPrizedMonth: editMember.prizedMonth?.includes(selectedMonth) || false,
             });
+            setAmountWords(amountToWords(initialAmount));
         } else {
             setPhotoPreview(null);
+            setAmountWords('');
             form.resetFields();
         }
     }, [open, editMember, selectedMonth, chit, form]);
@@ -240,19 +291,26 @@ const MemberFormModal = ({
                                 min={0}
                                 precision={2}
                                 step={0.01}
-                                formatter={(value) =>
-                                    value
-                                        ? `₹ ${Number(value).toLocaleString("en-IN", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        })}`
-                                        : ""
-                                }
+                                controls={false}
+                                formatter={(value, info) => {
+                                    if (info?.userTyping) return info.input;
+                                    if (value === "" || value === undefined || value === null) return "";
+                                    return `₹ ${Number(value).toLocaleString("en-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    })}`;
+                                }}
                                 parser={(value) =>
                                     value ? value.replace(/[₹,\s]/g, "") : ""
                                 }
+                                onChange={(value) => setAmountWords(amountToWords(value))}
                             />
                         </Form.Item>
+                        {amountWords && (
+                            <Text type="secondary" className="cd-amount-words" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic',color:'green' }}>
+                                {amountWords}
+                            </Text>
+                        )}
 
                         {takenBy ? (
                             <Form.Item label="Prized Month">

@@ -57,7 +57,6 @@ export default function Header() {
     setMenuOpen(false);
     navigate("/profile");
   };
-  console.log(user, "user")
   return (
     <div className="topbar">
       <div>

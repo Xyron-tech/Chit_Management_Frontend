@@ -109,7 +109,6 @@ export default function Home() {
   }
 
   const { totals, recentChits, monthTrend } = summary;
-  console.log(summary,"summary")
 
   const statCards = [
     { label: "Total pool value", value: currency(totals.totalPot), trend: "+4.2%", up: true },
