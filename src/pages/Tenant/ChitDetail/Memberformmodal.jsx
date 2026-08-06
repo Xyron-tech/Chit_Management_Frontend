@@ -223,7 +223,9 @@ const MemberFormModal = ({
             closable={!saving}
             footer={null}
             className="cd-modal"
-            width={isMobile ? '92%' : 460}
+            centered
+            width="92%"
+            style={{ maxWidth: 460 }}
         >
             <Text className="cd-modal-subtitle">
                 {editMember ? 'Update this member\'s details.' : `Add a new member to ${chit?.chitName}.`}
@@ -284,6 +286,19 @@ const MemberFormModal = ({
                             name="amount"
                             label={`${selectedMonth} Month Amount (₹)`}
                             extra="Applies to all members and automatically recalculates future months."
+                            rules={[
+                                {
+                                    validator: (_, value) => {
+                                        if (value === null || value === undefined || value === '') {
+                                            return Promise.reject(new Error('Please enter the amount'));
+                                        }
+                                        if (Number(value) <= 0) {
+                                            return Promise.reject(new Error('Amount must be greater than 0'));
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                },
+                            ]}
                         >
                             <InputNumber
                                 disabled={saving}
@@ -292,6 +307,12 @@ const MemberFormModal = ({
                                 precision={2}
                                 step={0.01}
                                 controls={false}
+                                // KEY FIX: while the user is actively typing, antd passes back
+                                // { userTyping, input } — we must return their raw input as-is,
+                                // otherwise every keystroke gets re-formatted (forcing ".00" back
+                                // in and jumping the cursor), which is what made delete/backspace
+                                // feel broken. We only apply the pretty ₹/comma/".00" formatting
+                                // once the user has stopped typing (e.g. on blur).
                                 formatter={(value, info) => {
                                     if (info?.userTyping) return info.input;
                                     if (value === "" || value === undefined || value === null) return "";
@@ -307,7 +328,7 @@ const MemberFormModal = ({
                             />
                         </Form.Item>
                         {amountWords && (
-                            <Text type="secondary" className="cd-amount-words" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic',color:'green' }}>
+                            <Text type="secondary" className="cd-amount-words" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
                                 {amountWords}
                             </Text>
                         )}

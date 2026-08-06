@@ -115,6 +115,34 @@
   transform: scale(1.05);
 }
 
+.pf-avatar-edit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pf-avatar-loading-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 41, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-avatar-loading-overlay .ant-spin-dot-item {
+  background-color: #ffffff;
+}
+
+.pf-dragger-loading {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .pf-identity {
   flex: 1;
   min-width: 160px;
@@ -151,6 +179,7 @@
   gap: 8px;
   flex-shrink: 0;
   margin-left: auto;
+  flex-wrap: wrap;
 }
 
 .pf-divider {
@@ -344,13 +373,6 @@
     font-size: 16px;
   }
 
-  .pf-identity-actions {
-    margin-left: 0;
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: 10px;
-  }
-
   .pf-form-actions {
     flex-direction: column-reverse;
   }
@@ -384,6 +406,24 @@
 
   .cert-delete-btn {
     opacity: 1; /* no hover on touch devices */
+  }
+}
+
+/* True phone widths — stack the identity action buttons full-width
+   so they're easy to tap. Above this, they stay inline/wrapped so
+   they don't stretch awkwardly across a wide card. */
+@media (max-width: 576px) {
+  .pf-identity-actions {
+    margin-left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 10px;
+  }
+
+  .pf-identity-actions .ant-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 

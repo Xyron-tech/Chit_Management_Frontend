@@ -7,7 +7,7 @@ import {
 import {
     ThunderboltOutlined, OrderedListOutlined,
     CheckCircleFilled, FlagFilled,
-    CameraOutlined, PictureOutlined
+    CameraOutlined, PictureOutlined, CloseOutlined
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
@@ -92,6 +92,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
     const [form] = Form.useForm();
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [removeImageFlag, setRemoveImageFlag] = useState(false);
     const [chitAmountWords, setChitAmountWords] = useState('');
     const [installmentAmountWords, setInstallmentAmountWords] = useState('');
 
@@ -114,12 +115,14 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
             setInstallmentAmountWords('');
         }
         setImageFile(null);
+        setRemoveImageFlag(false);
     }, [open, editChit, form]);
 
     const handleCancel = () => {
         form.resetFields();
         setImageFile(null);
         setImagePreview(null);
+        setRemoveImageFlag(false);
         onCancel();
     };
 
@@ -131,14 +134,35 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
             return Upload.LIST_IGNORE;
         }
         setImageFile(file);
+        setRemoveImageFlag(false);
         const reader = new FileReader();
         reader.onload = () => setImagePreview(reader.result);
         reader.readAsDataURL(file);
         return false; // prevent antd auto-upload
     };
 
+    // Clears the preview and marks the existing image for removal on save.
+    // Stops the click from bubbling up into the Upload's file picker.
+    const handleRemoveImage = (e) => {
+        e.stopPropagation();
+        setImageFile(null);
+        setImagePreview(null);
+        setRemoveImageFlag(true);
+    };
+
     const handleFinish = (values) => {
-        onSubmit(values, imageFile);
+        onSubmit(values, imageFile, removeImageFlag);
+    };
+
+    // Auto-calculate End Date whenever Start Date or Total Months changes.
+    // e.g. Start Date 04-08-2026 + Total Months 20 -> End Date 04-04-2028
+    const handleValuesChange = (changedValues) => {
+        if ('startDate' in changedValues || 'totalMonths' in changedValues) {
+            const { startDate, totalMonths } = form.getFieldsValue(['startDate', 'totalMonths']);
+            if (startDate && totalMonths) {
+                form.setFieldsValue({ endDate: dayjs(startDate).add(totalMonths, 'month') });
+            }
+        }
     };
 
     const isEditing = !!editChit;
@@ -150,7 +174,9 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
             onCancel={handleCancel}
             footer={null}
             className="tenant-modal"
-            width={640}
+            centered
+            width="92%"
+            style={{ maxWidth: 460 }}
         >
             <Text className="tenant-modal-subtitle">
                 {isEditing ? 'Update the details of this chit fund.' : 'Set up a new chit fund scheme for your members.'}
@@ -165,7 +191,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                     <div className="chit-image-upload">
                         <Avatar
                             shape="square"
-                            size={88}
+                            style={{width:'60px',height:'60px'}}
                             src={imagePreview || undefined}
                             className="chit-image-avatar"
                             icon={!imagePreview ? <PictureOutlined /> : undefined}
@@ -173,6 +199,16 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                         <span className="chit-image-overlay">
                             <CameraOutlined />
                         </span>
+                        {imagePreview && (
+                            <button
+                                type="button"
+                                className="chit-image-remove-btn"
+                                onClick={handleRemoveImage}
+                                aria-label="Remove photo"
+                            >
+                                <CloseOutlined />
+                            </button>
+                        )}
                     </div>
                 </Upload>
                 <Text className="chit-image-hint">
@@ -184,6 +220,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                 form={form}
                 layout="vertical"
                 onFinish={handleFinish}
+                onValuesChange={handleValuesChange}
                 className="tenant-modal-form"
             >
                 <Form.Item name="chitName" label="Chit Name"
@@ -230,7 +267,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                             />
                         </Form.Item>
                         {chitAmountWords && (
-                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic',fontSize:'14px',color:'blue' }}>
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
                                 {chitAmountWords}
                             </Text>
                         )}
@@ -250,7 +287,7 @@ const ChitFormModal = ({ open, editChit, onCancel, onSubmit, loading }) => {
                             />
                         </Form.Item>
                         {installmentAmountWords && (
-                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' ,fontSize:'14px',color:'blue' }}>
+                            <Text type="secondary" style={{ display: 'block', marginTop: -16, marginBottom: 16, fontStyle: 'italic' }}>
                                 {installmentAmountWords}
                             </Text>
                         )}

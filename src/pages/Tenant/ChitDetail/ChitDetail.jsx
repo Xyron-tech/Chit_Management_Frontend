@@ -403,6 +403,11 @@ const ChitDetail = () => {
 
   const prizedMember = getPrizedMemberForMonth(selectedMonth);
 
+  // Total members currently in this chit, and whether every one of them
+  // is already marked "paid" for the selected month.
+  const totalMembersCount = chit.members?.length || 0;
+  const allPaidThisMonth = totalMembersCount > 0 && paidCount === totalMembersCount;
+
   return (
     <div className="cd-content">
 
@@ -523,14 +528,17 @@ const ChitDetail = () => {
               <Option key={opt.value} value={opt.value}>{opt.label}</Option>
             ))}
           </Select>
-          <Button
-            className="mark-all-btn"
-            type="primary"
-            icon={<CheckCircleOutlined />}
-            onClick={handleMarkAllPaid}
-          >
-            {isMobile ? 'Mark All' : 'Mark All Paid'}
-          </Button>
+          <Tooltip >
+            <Button
+              className="mark-all-btn"
+              type="primary"
+              icon={<CheckCircleOutlined />}
+              onClick={handleMarkAllPaid}
+              disabled={allPaidThisMonth}
+            >
+              {isMobile ? 'Mark All' : 'Mark All Paid'}
+            </Button>
+          </Tooltip>
         </div>
 
         {isMobile ? (

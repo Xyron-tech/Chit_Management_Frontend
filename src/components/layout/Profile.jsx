@@ -5,8 +5,10 @@ import {
 } from 'antd';
 import {
   EditOutlined, CameraOutlined, DeleteOutlined, PlusOutlined, FileImageOutlined,
+  LockOutlined,
 } from '@ant-design/icons';
 import API from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 import './Profile.css';
 
 const { Title, Text } = Typography;
@@ -20,26 +22,29 @@ const getInitials = (name) => {
 };
 
 const ProfilePage = () => {
+  const { updateUser } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [pictureUploading, setPictureUploading] = useState(false);
   const [certModal, setCertModal] = useState(false);
   const [certSaving, setCertSaving] = useState(false);
   const [certName, setCertName] = useState('');
   const [certFile, setCertFile] = useState(null);
   const [form] = Form.useForm();
 
+  // ===== Change password state =====
+  const [passwordModal, setPasswordModal] = useState(false);
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordForm] = Form.useForm();
   // ===== Fetch profile =====
   const fetchProfile = async () => {
     try {
       setLoading(true);
       const { data } = await API.get('/auth/me');
       setProfile(data);
-      // NOTE: no form.setFieldsValue here — the Form only mounts once
-      // `editing` is true, so we feed it via `initialValues` instead
-      // (see the <Form> below). Calling setFieldsValue before the Form
-      // mounts is what caused the "not connected to any Form element" warning.
+
     } catch (err) {
       message.error(err.response?.data?.message || 'Unable to load profile. Please try again.');
     } finally {
@@ -62,6 +67,11 @@ const ProfilePage = () => {
       });
 
       setProfile(data.user);
+      // Keep the global AuthContext user (used by Header, etc.) and
+      // localStorage in sync — without this, edits here only lived in
+      // this page's local `profile` state and the rest of the app kept
+      // showing the stale name/picture until the next full login.
+      updateUser(data.user);
       setEditing(false);
       message.success('Profile updated');
     } catch (err) {
@@ -74,6 +84,7 @@ const ProfilePage = () => {
   // ===== Change profile picture =====
   const handlePictureChange = async (file) => {
     try {
+      setPictureUploading(true);
       const formData = new FormData();
       formData.append('name', profile.name);
       formData.append('email', profile.email);
@@ -84,9 +95,12 @@ const ProfilePage = () => {
       });
 
       setProfile(data?.user);
+      updateUser(data?.user);
       message.success('Profile picture updated');
     } catch (err) {
       message.error(err.response?.data?.message || 'Unable to update picture.');
+    } finally {
+      setPictureUploading(false);
     }
     return false; // prevent antd Upload's default auto-upload
   };
@@ -95,9 +109,34 @@ const ProfilePage = () => {
     try {
       const { data } = await API.delete('/auth/me/profile-picture');
       setProfile((p) => ({ ...p, profilePicture: data.profilePicture }));
+      // Endpoint only returns the (now-cleared) profilePicture field, so
+      // merge just that piece into the shared user rather than the
+      // whole object — updateUser merges shallowly, so this won't wipe
+      // out name/email/etc already in context.
+      updateUser({ profilePicture: data.profilePicture });
       message.success('Profile picture removed');
     } catch (err) {
       message.error('Unable to remove picture.');
+    }
+  };
+
+  // ===== Change password =====
+  const handleChangePassword = async (values) => {
+    try {
+      setPasswordSaving(true);
+      // Adjust this endpoint to match your backend route.
+      await API.put('/auth/me/change-password', {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      });
+
+      message.success('Password updated successfully');
+      setPasswordModal(false);
+      passwordForm.resetFields();
+    } catch (err) {
+      message.error(err.response?.data?.message || 'Unable to update password. Please check your current password.');
+    } finally {
+      setPasswordSaving(false);
     }
   };
 
@@ -158,12 +197,22 @@ const ProfilePage = () => {
             >
               {getInitials(profile?.name)}
             </Avatar>
+            {pictureUploading && (
+              <div className="pf-avatar-loading-overlay">
+                <Spin size="small" />
+              </div>
+            )}
             <Upload
               showUploadList={false}
               accept="image/*"
               beforeUpload={handlePictureChange}
+              disabled={pictureUploading}
             >
-              <button className="pf-avatar-edit-btn" type="button">
+              <button
+                className="pf-avatar-edit-btn"
+                type="button"
+                disabled={pictureUploading}
+              >
                 <CameraOutlined />
               </button>
             </Upload>
@@ -186,6 +235,9 @@ const ProfilePage = () => {
                 <Button size="small" danger type="text">Remove photo</Button>
               </Popconfirm>
             )}
+            <Button icon={<LockOutlined />} onClick={() => setPasswordModal(true)}>
+              Change Password
+            </Button>
             {!editing && (
               <Button icon={<EditOutlined />} onClick={() => setEditing(true)}>
                 Edit Profile
@@ -303,9 +355,19 @@ const ProfilePage = () => {
             maxCount={1}
             beforeUpload={(file) => { setCertFile(file); return false; }}
             onRemove={() => setCertFile(null)}
+            disabled={certSaving}
           >
-            <p className="ant-upload-drag-icon"><FileImageOutlined /></p>
-            <p className="ant-upload-text">Click or drag an image here</p>
+            {certSaving ? (
+              <div className="pf-dragger-loading">
+                <Spin />
+                <p className="ant-upload-text" style={{ marginTop: 8 }}>Uploading…</p>
+              </div>
+            ) : (
+              <>
+                <p className="ant-upload-drag-icon"><FileImageOutlined /></p>
+                <p className="ant-upload-text">Click or drag an image here</p>
+              </>
+            )}
           </Upload.Dragger>
 
           <div className="pf-form-actions" style={{ marginTop: 20 }}>
@@ -317,6 +379,71 @@ const ProfilePage = () => {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* ===== Change password modal ===== */}
+      <Modal
+        title="Change Password"
+        open={passwordModal}
+        onCancel={() => { setPasswordModal(false); passwordForm.resetFields(); }}
+        footer={null}
+        destroyOnClose
+      >
+        <Form
+          form={passwordForm}
+          layout="vertical"
+          onFinish={handleChangePassword}
+          className="pf-form"
+        >
+          <Form.Item
+            name="currentPassword"
+            label="Current Password"
+            rules={[{ required: true, message: 'Current password is required' }]}
+          >
+            <Input.Password placeholder="Enter current password" />
+          </Form.Item>
+
+          <Form.Item
+            name="newPassword"
+            label="New Password"
+            rules={[
+              { required: true, message: 'New password is required' },
+              { min: 6, message: 'Password must be at least 6 characters' },
+            ]}
+            hasFeedback
+          >
+            <Input.Password placeholder="Enter new password" />
+          </Form.Item>
+
+          <Form.Item
+            name="confirmPassword"
+            label="Confirm New Password"
+            dependencies={['newPassword']}
+            hasFeedback
+            rules={[
+              { required: true, message: 'Please confirm your new password' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('newPassword') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Passwords do not match'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="Re-enter new password" />
+          </Form.Item>
+
+          <div className="pf-form-actions">
+            <Button onClick={() => { setPasswordModal(false); passwordForm.resetFields(); }}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" loading={passwordSaving}>
+              Update Password
+            </Button>
+          </div>
+        </Form>
       </Modal>
     </div>
   );

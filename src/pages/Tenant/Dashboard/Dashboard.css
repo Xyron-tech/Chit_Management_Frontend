@@ -579,14 +579,14 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 4px 0 20px;
+  margin: 0 0 12px;
 }
 
 .chit-image-upload {
   position: relative;
   cursor: pointer;
-  width: 88px;
-  height: 88px;
+  width: 60px;
+  height: 60px;
   border-radius: var(--radius-md);
 }
 
@@ -616,6 +616,30 @@
   opacity: 1;
 }
 
+.chit-image-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: #ffffff;
+  border: 2px solid var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.chit-image-remove-btn:hover {
+  background: #8f1a10;
+  transform: scale(1.08);
+}
+
 .chit-image-hint.ant-typography {
   display: block;
   font-size: 12px;
@@ -625,16 +649,113 @@
 
 /* ---------------- Modal / Form ---------------- */
 
-.tenant-modal.ant-modal {
-  max-width: calc(100vw - 24px);
-}
+/* IMPORTANT: the Modal component itself must have the `centered` prop
+   (<Modal centered ...>). Antd's built-in centered mode uses a
+   vertical-align:middle trick internally that correctly scrolls to the
+   TOP of oversized content — unlike a manual `display:flex; align-items:
+   center` override on .ant-modal-wrap, which cuts off the modal's top
+   (title/close button) because the initial scroll position lands
+   mid-content with no way to scroll up to it. Do not re-add manual flex
+   centering here.
 
-.tenant-modal .ant-modal-content {
+   We just cap the content's height to the viewport and let ONLY the
+   form body scroll — the header/footer stay pinned so buttons are
+   always reachable. Rules apply to both .tenant-modal (Chit form) and
+   .cd-modal (Member form). */
+.tenant-modal .ant-modal-content,
+.cd-modal .ant-modal-content {
   border-radius: var(--radius-lg);
-  padding: 28px 28px 24px;
+  padding: 0;
+  max-height: min(640px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.tenant-modal .ant-modal-title {
+.tenant-modal .ant-modal-close,
+.cd-modal .ant-modal-close {
+  top: 18px;
+  right: 18px;
+}
+
+.tenant-modal .ant-modal-header,
+.cd-modal .ant-modal-header {
+  padding: 20px 22px 0;
+  margin-bottom: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
+}
+
+.tenant-modal .ant-modal-body,
+.cd-modal .ant-modal-body {
+  padding: 0 22px 18px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+/* ---------------- Custom scrollbar ---------------- */
+/* Thin, rounded, gold-accent scrollbar — used on the modal body and any
+   scrollable panel (e.g. the payments table). Add class="custom-scrollbar"
+   to any overflow-y:auto container to pick up this style. */
+.tenant-modal .ant-modal-body,
+.cd-modal .ant-modal-body,
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+
+.tenant-modal .ant-modal-body::-webkit-scrollbar,
+.cd-modal .ant-modal-body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.tenant-modal .ant-modal-body::-webkit-scrollbar-track,
+.cd-modal .ant-modal-body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tenant-modal .ant-modal-body::-webkit-scrollbar-thumb,
+.cd-modal .ant-modal-body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--gold);
+  border-radius: 999px;
+}
+
+.tenant-modal .ant-modal-body::-webkit-scrollbar-thumb:hover,
+.cd-modal .ant-modal-body::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gold-dark);
+}
+
+/* ---------------- Scrollable table container ---------------- */
+/* Fixed, compact width/height panel for tables like the payments
+   schedule — content scrolls vertically inside it instead of pushing
+   the page height out. Wrap your <Table>/rows in a div with this class:
+     <div className="table-scroll-container custom-scrollbar">
+       <Table ... />
+     </div>
+   Adjust max-width / max-height below to fit your layout. */
+.table-scroll-container {
+  max-width: 560px;
+  max-height: 360px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.table-scroll-container .ant-table-thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.tenant-modal .ant-modal-title,
+.cd-modal .ant-modal-title {
   font-size: 18px;
   font-weight: 700;
   color: var(--ink-900);
@@ -648,7 +769,8 @@
   margin-bottom: 20px;
 }
 
-.tenant-modal-form .ant-form-item-label > label {
+.tenant-modal-form .ant-form-item-label > label,
+.cd-modal-form .ant-form-item-label > label {
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-800);
@@ -657,17 +779,24 @@
 .tenant-modal-form .ant-input,
 .tenant-modal-form .ant-input-number,
 .tenant-modal-form .ant-select-selector,
-.tenant-modal-form .ant-picker {
+.tenant-modal-form .ant-picker,
+.cd-modal-form .ant-input,
+.cd-modal-form .ant-input-number,
+.cd-modal-form .ant-select-selector,
+.cd-modal-form .ant-picker {
   border-radius: var(--radius-sm) !important;
   border-color: var(--ink-200) !important;
 }
 
 .tenant-modal-form .ant-input-number,
-.tenant-modal-form .ant-picker {
+.tenant-modal-form .ant-picker,
+.cd-modal-form .ant-input-number,
+.cd-modal-form .ant-picker {
   width: 100%;
 }
 
-.tenant-modal-footer {
+.tenant-modal-footer,
+.cd-modal-footer {
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -676,14 +805,16 @@
   border-top: 1px solid var(--ink-100);
 }
 
-.tenant-modal-submit-btn.ant-btn {
+.tenant-modal-submit-btn.ant-btn,
+.cd-modal-submit-btn.ant-btn {
   background: var(--navy);
   border-color: var(--navy);
   font-weight: 600;
   border-radius: var(--radius-sm);
 }
 
-.tenant-modal-submit-btn.ant-btn:hover {
+.tenant-modal-submit-btn.ant-btn:hover,
+.cd-modal-submit-btn.ant-btn:hover {
   background: var(--navy-light) !important;
   border-color: var(--navy-light) !important;
 }
@@ -884,8 +1015,25 @@ margin-left: auto;
     padding-bottom: 35px;
   }
 
-  .tenant-modal .ant-modal-content {
-    padding: 20px 16px 18px;
+  .tenant-modal .ant-modal-content,
+  .cd-modal .ant-modal-content {
+    max-height: calc(100vh - 24px);
+  }
+
+  .tenant-modal .ant-modal-header,
+  .cd-modal .ant-modal-header {
+    padding: 16px 16px 0;
+  }
+
+  .tenant-modal .ant-modal-body,
+  .cd-modal .ant-modal-body {
+    padding: 0 16px 16px;
+  }
+
+  .tenant-modal .ant-modal-close,
+  .cd-modal .ant-modal-close {
+    top: 14px;
+    right: 14px;
   }
 }
 
